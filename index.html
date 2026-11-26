@@ -581,7 +581,7 @@
                 ၂၀၂၆-၂၀၂၇ ဘဏ္ဍာနှစ်
               </span>
             </div>
-            <h1 class="header-text-shadow text-xl sm:text-2xl lg:text-[28px] font-bold tracking-tight leading-snug mt-1 text-white">
+            <h1 id="mainSiteTitle" class="header-text-shadow text-xl sm:text-2xl lg:text-[28px] font-bold tracking-tight leading-snug mt-1 text-white">
               ပုပ္ပားတောင်ဥယျာဉ် - ဒေတာဘေ့စ်စနစ်
             </h1>
           </div>
@@ -669,7 +669,7 @@
       <div class="mt-3 pt-2.5 border-t border-white/20 flex flex-col xl:flex-row xl:items-center justify-between gap-2.5">
         <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-3 gap-y-1.5 text-xs">
           <div class="flex flex-wrap items-center gap-2 text-emerald-50 header-text-shadow">
-            <span class="font-semibold text-amber-200">🏛️ ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး</span>
+            <span id="hdrOfficeName" class="font-semibold text-amber-200">🏛️ ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး</span>
             <span class="opacity-60">•</span>
             <span id="hdrScopeLabel" class="font-medium">၂၄ နိုဝင်ဘာ ၂၀၂၆ (အင်္ဂါနေ့)</span>
             <button type="button" onclick="triggerHeaderBgUpload()"
@@ -787,11 +787,28 @@
                   <div class="text-[11px] text-slate-500">ပြင်ဆင်မှုနှင့် လုံခြုံရေးမှတ်တမ်းများ</div>
                 </div>
               </button>
-              <button type="button" onclick="openSysSettingsModal()" class="w-full text-left px-3.5 py-2.5 text-xs sm:text-sm hover:bg-slate-100 flex items-center gap-2.5 transition">
+              <button type="button" onclick="openSysSettingsModal('office')" class="w-full text-left px-3.5 py-2.5 text-xs sm:text-sm hover:bg-emerald-50 flex items-center gap-2.5 transition">
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">🏛️</span>
+                <div>
+                  <div class="font-semibold">ရုံးဌာနဆက်တင် (Office Settings)</div>
+                  <div class="text-[11px] text-slate-500">ရုံးအမည် • လက်မှတ် • စာအမှတ်ရှေ့ဆက်</div>
+                </div>
+              </button>
+              <button type="button" onclick="openSysSettingsModal('data')" class="w-full text-left px-3.5 py-2.5 text-xs sm:text-sm hover:bg-blue-50 flex items-center justify-between gap-2 transition">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">💾</span>
+                  <div class="min-w-0">
+                    <div class="font-semibold">Data Management (Backup/Restore)</div>
+                    <div class="text-[11px] text-slate-500">Storage • Export • Validated Restore</div>
+                  </div>
+                </div>
+                <span id="menuBackupStatusBadge" class="hidden px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 shrink-0">Backup</span>
+              </button>
+              <button type="button" onclick="openSysSettingsModal('prefs')" class="w-full text-left px-3.5 py-2.5 text-xs sm:text-sm hover:bg-slate-100 flex items-center gap-2.5 transition">
                 <span class="w-7 h-7 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center shrink-0">🎛️</span>
                 <div>
-                  <div class="font-semibold">စနစ်ဆက်တင်များ (Preferences)</div>
-                  <div class="text-[11px] text-slate-500">စာလုံးအရွယ် • Auto-Lock • Shortcuts</div>
+                  <div class="font-semibold">စနစ်နှင့် မြင်ကွင်းဆက်တင် (Preferences)</div>
+                  <div class="text-[11px] text-slate-500">စာလုံးအရွယ် • Auto-Sync • Shortcuts</div>
                 </div>
               </button>
               <div class="border-t border-slate-100 my-1"></div>
@@ -1040,7 +1057,7 @@
         </span>
         <span id="deptStripScope" class="text-[11px] text-slate-500"></span>
       </div>
-      <div id="deptProgressStrip" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5"></div>
+      <div id="deptProgressStrip" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5"></div>
     </section>
 
     <!-- ===================================================================== -->
@@ -1117,12 +1134,81 @@
             <span>Sync စစ်မည်</span>
           </button>
 
+          <button type="button" id="advFilterToggleBtn" onclick="toggleAdvFilterBar()"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 border border-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer"
+            title="ရက်စွဲအပိုင်းအခြား၊ အကြိမ်ရေနှင့် စီစဉ်မှု အဆင့်မြင့်စစ်ထုတ်ရန်">
+            <span>🔍</span>
+            <span>အဆင့်မြင့်စစ်ထုတ်</span>
+            <span id="advFilterActiveDot" class="hidden w-2 h-2 rounded-full bg-amber-500"></span>
+          </button>
+
+          <button type="button" onclick="openSysSettingsModal('data')"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 text-xs font-semibold transition cursor-pointer"
+            title="Data Management (Backup / Export / Restore)">
+            <span>💾</span>
+            <span class="hidden sm:inline">Backup / Data</span>
+          </button>
+
           <button type="button" id="bulkModeToggleBtn" onclick="toggleBulkSelectMode()"
             class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 border border-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer"
             title="လုပ်ငန်းများကို အစုလိုက်ရွေးချယ်၍ ပြီးစီးအမှတ်ခြစ်ရန်">
             <span>☑️</span>
             <span>အစုလိုက်ရွေး</span>
           </button>
+        </div>
+      </div>
+
+      <!-- Row 4: Advanced Data Filter & Sort Panel (Collapsible) -->
+      <div id="advFilterBar" class="hidden pt-2.5 border-t border-slate-100 space-y-2.5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <div>
+            <label for="filterDateFrom" class="block text-[11px] font-bold text-slate-500 mb-1">📅 ရက်စွဲ (မှ)</label>
+            <input type="date" id="filterDateFrom" min="2026-11-25" max="2031-03-31" onchange="onAdvFilterChange()"
+              class="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs text-slate-800" />
+          </div>
+          <div>
+            <label for="filterDateTo" class="block text-[11px] font-bold text-slate-500 mb-1">📅 ရက်စွဲ (အထိ)</label>
+            <input type="date" id="filterDateTo" min="2026-11-25" max="2031-03-31" onchange="onAdvFilterChange()"
+              class="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs text-slate-800" />
+          </div>
+          <div>
+            <label for="filterCategorySelect" class="block text-[11px] font-bold text-slate-500 mb-1">🏷️ အကြိမ်ရေ / အမျိုးအစား</label>
+            <select id="filterCategorySelect" onchange="onAdvFilterChange()"
+              class="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs font-semibold text-slate-800">
+              <option value="ALL">အမျိုးအစားအားလုံး</option>
+              <option value="HIGH">★ အရေးကြီးလုပ်ငန်းများသာ</option>
+              <option value="WEEKLY">အပတ်စဉ် လုပ်ငန်းများ</option>
+              <option value="MONTHLY">လစဉ် လုပ်ငန်းများ</option>
+              <option value="PERIODIC">သုံးလပတ် / ၆ လ / နှစ်စဉ်</option>
+              <option value="CUSTOM">ထပ်တိုးလုပ်ငန်းများသာ</option>
+              <option value="WITH_NOTE">📝 စာအမှတ် / မှတ်ချက်ပါဝင်</option>
+            </select>
+          </div>
+          <div>
+            <label for="filterSortSelect" class="block text-[11px] font-bold text-slate-500 mb-1">↕️ စီစဉ်မှုပုံစံ (Sort)</label>
+            <select id="filterSortSelect" onchange="onAdvFilterChange()"
+              class="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs font-semibold text-slate-800">
+              <option value="DATE_ASC">ရက်စွဲ (အစောဆုံး → နောက်ဆုံး)</option>
+              <option value="DATE_DESC">ရက်စွဲ (နောက်ဆုံး → အစောဆုံး)</option>
+              <option value="PRIORITY">★ အရေးကြီး ဦးစားပေး</option>
+              <option value="DEPT">ဌာနစိတ်အလိုက် စီမည်</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div id="filterMatchSummary" class="font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-xl">
+            တွေ့ရှိမှု: ၀ ခု
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="exportCSV(false)"
+              class="px-3 py-1 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold cursor-pointer">
+              📊 စစ်ထုတ်ရလဒ် CSV ထုတ်မည်
+            </button>
+            <button type="button" onclick="resetFilters()"
+              class="px-3 py-1 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-700 border border-slate-200 text-slate-700 text-xs font-semibold cursor-pointer">
+              ↺ စစ်ထုတ်မှုအားလုံး ရှင်းမည်
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1168,7 +1254,6 @@
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
           <h3 id="calendarHeading" class="text-base sm:text-lg font-bold text-emerald-950"></h3>
           <div class="flex flex-wrap items-center gap-2.5 text-[11px] sm:text-xs text-slate-600">
-            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>အုပ်ချုပ်ရေးမှူး</span>
             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>ငွေစာရင်း</span>
             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>စီမံ</span>
             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>လုပ်ငန်း</span>
@@ -1233,9 +1318,24 @@
         </div>
       </div>
     </section>
+
+    <!-- Print-Only Official Signatory Block -->
+    <div id="printSignatureBlock" class="hidden print-only mt-8 pt-4 border-t border-slate-300">
+      <div class="flex justify-between items-end text-xs text-slate-800">
+        <div>
+          <div id="printFooterOffice" class="font-bold">ပုပ္ပားတောင်ဥယျာဉ် • ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး</div>
+          <div id="printGeneratedAt" class="text-[11px] text-slate-500 mt-0.5"></div>
+        </div>
+        <div class="text-center min-w-[200px]">
+          <div class="border-b border-slate-400 h-10 mb-1"></div>
+          <div id="printSignatoryName" class="font-bold"></div>
+          <div id="printSignatoryTitle" class="text-[11px] text-slate-600">ဥယျာဉ်အုပ်ချုပ်ရေးမှူး</div>
+        </div>
+      </div>
+    </div>
   </main>
 
-  <footer class="w-full px-4 sm:px-7 py-5 text-center text-xs sm:text-sm text-slate-500 no-print">
+  <footer id="mainFooterText" class="w-full px-4 sm:px-7 py-5 text-center text-xs sm:text-sm text-slate-500 no-print">
     ပုပ္ပားတောင်ဥယျာဉ် ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး • နေ့စဉ်လုပ်ငန်းစောင့်ကြည့်ကြီးကြပ်မှုနှင့် ဒေတာဘေ့စ်ဗဟိုစနစ် (AD-Database)
   </footer>
 
@@ -1539,7 +1639,6 @@
               <option value="လုပ်ငန်း">လုပ်ငန်း</option>
               <option value="စီမံ">စီမံ</option>
               <option value="ငွေစာရင်း">ငွေစာရင်း</option>
-              <option value="အုပ်ချုပ်ရေးမှူး">အုပ်ချုပ်ရေးမှူး</option>
             </select>
           </div>
         </div>
@@ -1593,7 +1692,6 @@
             <label class="block text-xs font-semibold text-slate-700 mb-1">တာဝန်ခံဌာနစိတ် *</label>
             <select id="editTaskDept" required
               class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm text-slate-800 bg-white">
-              <option value="အုပ်ချုပ်ရေးမှူး">အုပ်ချုပ်ရေးမှူး</option>
               <option value="ငွေစာရင်း">ငွေစာရင်း</option>
               <option value="စီမံ">စီမံ</option>
               <option value="လုပ်ငန်း">လုပ်ငန်း</option>
@@ -1753,23 +1851,24 @@
             <span class="text-amber-300 font-bold shrink-0">SHA-256 Integrity Digest:</span>
             <span id="secDataFingerprint" class="truncate select-all">Calculating...</span>
           </div>
+          <div id="secCryptoEngineNote" class="text-[11px] font-semibold text-emerald-800 flex items-center gap-1.5"></div>
         </div>
 
-        <!-- Card A: App Access Lock (Screen Lock Passcode) -->
+        <!-- Card A: Database & App Access Lock (SHA-256 Passcode + WebAuthn Biometric) -->
         <div class="p-4 rounded-2xl border border-slate-200 bg-white space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h4 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                <span>🔐</span> <span>၁။ စနစ်ဝင်ရောက်မှု လုံခြုံရေးသော့ (App Access Passcode)</span>
+                <span>🔐</span> <span>၁။ Database နှင့် စနစ်ဝင်ရောက်မှုသော့ (Passcode + Biometric WebAuthn)</span>
               </h4>
-              <p class="text-[11px] text-slate-500">ဖွင့်ထားပါက Passcode မှန်ကန်မှသာ ဝဘ်စာမျက်နှာကို ကြည့်ရှုအသုံးပြုနိုင်မည် (PBKDF2-SHA256 ဖြင့်သာ သိမ်းသည်)</p>
+              <p class="text-[11px] text-slate-500">Web Crypto API (PBKDF2-SHA256) ဖြင့် Encrypt လုပ်သိမ်းဆည်းပြီး Fingerprint / Face ID ဖြင့်ပါ တွဲဖက်အသုံးပြုနိုင်သည်</p>
             </div>
             <span id="appLockStatusPill" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600">ပိတ်ထားသည်</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div>
-              <label class="block text-[11px] font-semibold text-slate-600 mb-1">App Passcode အသစ် (အနည်းဆုံး ၆ လုံး)</label>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Database / App Passcode အသစ် (အနည်းဆုံး ၆ လုံး)</label>
               <input type="password" id="secAppPass1" placeholder="ဥပမာ - Popa@2026"
                 class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
@@ -1799,7 +1898,48 @@
               </button>
               <button type="button" onclick="saveAppLockPasscode()"
                 class="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs cursor-pointer">
-                ✓ App Passcode သိမ်းမည်
+                ✓ Database Passcode သိမ်းမည်
+              </button>
+            </div>
+          </div>
+
+          <!-- Database Hub File Access Gate Toggle -->
+          <div class="p-3 rounded-xl bg-emerald-50/55 border border-emerald-200/80 space-y-2">
+            <label class="inline-flex items-start gap-2 cursor-pointer text-xs font-semibold text-emerald-950">
+              <input type="checkbox" id="dbAccessLockChk" onchange="toggleDbAccessLock(this.checked)" class="w-4 h-4 mt-0.5 accent-emerald-700 rounded cursor-pointer shrink-0" />
+              <span>📂 <strong>Database ဖိုင်များ (Excel / QGIS / Drive) ဖွင့်တိုင်း Passcode (သို့) Biometric စစ်ဆေးမည်</strong></span>
+            </label>
+            <p class="text-[11px] text-slate-600 pl-6 leading-relaxed">
+              ဖွင့်ထားပါက ဒေတာဘေ့စ်ကတ်များကို နှိပ်ဖွင့်ချိန်တွင် Passcode သို့မဟုတ် Fingerprint / Face ID ဖြင့် ထပ်ဆင့်အတည်ပြုပြီးမှ ဖွင့်လှစ်ပေးပါမည်။
+            </p>
+          </div>
+
+          <!-- Biometric Lock (WebAuthn: Fingerprint / Face ID / Windows Hello) -->
+          <div class="p-3.5 rounded-xl bg-sky-50/60 border border-sky-200 space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="min-w-0">
+                <div class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                  <span>👆</span> <span>Biometric Lock (WebAuthn — Fingerprint / Face ID / Windows Hello)</span>
+                </div>
+                <p id="biometricStatusDesc" class="text-[11px] text-slate-600 mt-0.5">
+                  စက်၏ Fingerprint / Face ID ကို စစ်ဆေးနေသည်...
+                </p>
+              </div>
+              <span id="biometricStatusPill" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 shrink-0">ပိတ်ထားသည်</span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" id="registerBiometricBtn" onclick="registerBiometricCredential()"
+                class="px-3.5 py-2 rounded-xl bg-sky-700 hover:bg-sky-800 text-white text-xs font-bold shadow-xs transition cursor-pointer">
+                👆 Fingerprint / Face ID ချိတ်ဆက်မည်
+              </button>
+              <button type="button" id="testBiometricBtn" onclick="testBiometricUnlock()"
+                class="hidden px-3 py-2 rounded-xl bg-white hover:bg-sky-50 border border-sky-300 text-sky-800 text-xs font-bold cursor-pointer">
+                ✓ စမ်းသပ်စစ်ဆေးမည်
+              </button>
+              <button type="button" id="disableBiometricBtn" onclick="disableBiometricLock()"
+                class="hidden px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold cursor-pointer">
+                Biometric ဖြုတ်မည်
               </button>
             </div>
           </div>
@@ -1815,15 +1955,15 @@
           </div>
         </div>
 
-        <!-- Card B: Engineering / Admin Protection Mode -->
+        <!-- Card B: Dedicated Engineering / System Settings Admin Passcode -->
         <div class="p-4 rounded-2xl border border-amber-200 bg-amber-50/30 space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h4 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                <span>🛠️</span> <span>၂။ Database Engineering Passcode (ပြင်ဆင်/ဖျက်ဆီးမှု ကာကွယ်ရေး)</span>
+                <span>🛠️</span> <span>၂။ Engineering / System Settings Admin Passcode (သီးသန့် Admin သော့)</span>
               </h4>
               <p class="text-[11px] text-slate-600">
-                ဖွင့်ထားပါက လုပ်ငန်းပြင်ခြင်း (Edit)၊ ဖျက်ခြင်း (Delete)၊ Excel/QGIS Path ပြင်ခြင်း၊ Cloud Sync ပြင်ခြင်းနှင့် Backup သွင်းခြင်းတို့အတွက် Engineering Passcode မဖြစ်မနေ တောင်းဆိုမည်။
+                ဖွင့်ထားပါက System Preferences၊ Office Settings၊ Excel/QGIS Path၊ Cloud Sync၊ လုပ်ငန်းပြင်/ဖျက်၊ Backup Restore နှင့် Factory Reset တို့အတွက် သီးသန့် Admin Passcode မဖြစ်မနေ တောင်းဆိုမည်။
               </p>
             </div>
             <span id="engLockStatusPill" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600">ပိတ်ထားသည်</span>
@@ -1831,12 +1971,12 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div>
-              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Engineering Passcode အသစ် (အနည်းဆုံး ၆ လုံး)</label>
-              <input type="password" id="secEngPass1" placeholder="ဥပမာ - Eng#Popa2026"
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Admin / Engineering Passcode အသစ် (အနည်းဆုံး ၆ လုံး)</label>
+              <input type="password" id="secEngPass1" placeholder="ဥပမာ - Admin#Popa2026"
                 class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
             <div>
-              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Engineering Passcode ထပ်မံအတည်ပြုပါ</label>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Admin Passcode ထပ်မံအတည်ပြုပါ</label>
               <input type="password" id="secEngPass2" placeholder="တူညီစွာ ထပ်ရိုက်ပါ"
                 class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
             </div>
@@ -1851,11 +1991,11 @@
             <div class="flex flex-wrap items-center gap-2">
               <button type="button" id="disableEngLockBtn" onclick="disableEngLock()"
                 class="hidden px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold cursor-pointer">
-                Engineering Lock ဖြုတ်မည်
+                Admin Lock ဖြုတ်မည်
               </button>
               <button type="button" onclick="saveEngPasscode()"
                 class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-xs cursor-pointer">
-                ✓ Engineering Passcode သိမ်းမည်
+                ✓ Admin Passcode သိမ်းမည်
               </button>
             </div>
           </div>
@@ -1909,9 +2049,16 @@
             class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm text-slate-800" />
           <div id="engGateError" class="hidden text-xs font-semibold text-rose-600 mt-1.5"></div>
         </div>
+        <div id="engGateBioWrap" class="hidden pt-1">
+          <button type="button" onclick="unlockEngGateWithBiometric()"
+            class="w-full py-2.5 px-4 rounded-xl bg-sky-700 hover:bg-sky-800 text-white text-xs sm:text-sm font-bold shadow-xs flex items-center justify-center gap-2 transition cursor-pointer">
+            <span>👆</span>
+            <span>Fingerprint / Face ID ဖြင့် ဝင်ရောက်မည် (WebAuthn)</span>
+          </button>
+        </div>
         <div id="engGateSessionRow" class="flex items-center gap-2 text-xs text-slate-600">
           <input type="checkbox" id="engGateRememberChk" checked class="w-4 h-4 accent-emerald-700 rounded cursor-pointer" />
-          <label for="engGateRememberChk" class="cursor-pointer">၁၀ မိနစ်အတွင်း ထပ်မံမတောင်းဘဲ Engineering Mode ဖွင့်ထားမည်</label>
+          <label id="engGateRememberLabel" for="engGateRememberChk" class="cursor-pointer">၁၀ မိနစ်အတွင်း ထပ်မံမတောင်းဘဲ Engineering Mode ဖွင့်ထားမည်</label>
         </div>
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
           <button type="button" onclick="closeEngGateModal()" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 text-xs sm:text-sm font-semibold hover:bg-slate-50 cursor-pointer">
@@ -2001,78 +2148,293 @@
   </div>
 
   <!-- ======================================================================= -->
-  <!-- MODAL 11: SYSTEM SETTINGS & PREFERENCES                                 -->
+  <!-- MODAL 11: OFFICE SETTINGS, DATA MANAGEMENT & SYSTEM PREFERENCES         -->
   <!-- ======================================================================= -->
-  <div id="sysSettingsModal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-xs p-0 sm:p-4 no-print">
-    <div class="modal-pop bg-white w-full sm:max-w-xl rounded-t-3xl sm:rounded-2xl shadow-2xl border border-slate-200 overflow-hidden max-h-[90vh] flex flex-col">
+  <div id="sysSettingsModal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/65 backdrop-blur-xs p-0 sm:p-4 no-print">
+    <div class="modal-pop bg-white w-full sm:max-w-3xl rounded-t-3xl sm:rounded-2xl shadow-2xl border border-slate-200 overflow-hidden max-h-[92vh] flex flex-col">
+      <!-- Modal Header -->
       <div class="forest-gradient px-5 py-4 text-white flex items-center justify-between shrink-0">
         <div class="flex items-center gap-2.5">
-          <span class="text-xl">🎛️</span>
+          <span class="text-xl">🏛️</span>
           <div>
-            <h3 class="text-sm sm:text-base font-bold">စနစ်ဆက်တင်များ (System Preferences)</h3>
-            <p class="text-[11px] text-emerald-100">မြင်ကွင်းအရွယ်အစား၊ Auto-Sync ကြိမ်နှုန်းနှင့် Keyboard Shortcuts</p>
+            <h3 class="text-sm sm:text-base font-bold">ရုံးဌာနဆက်တင်နှင့် Data Management စနစ်</h3>
+            <p class="text-[11px] text-emerald-100">Office Profile • Backup / Export &amp; Validated Restore • System Preferences</p>
           </div>
         </div>
         <button type="button" onclick="closeSysSettingsModal()" class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white cursor-pointer">✕</button>
       </div>
 
-      <div class="p-5 space-y-4 overflow-y-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5">🔤 စာလုံးအရွယ်အစား (Font Scale)</label>
-            <select id="prefFontScale" onchange="updatePref('fontScale', this.value)"
-              class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white font-semibold">
-              <option value="normal">ပုံမှန် (Standard)</option>
-              <option value="lg">အကြီး (Large)</option>
-              <option value="xl">အထူးကြီး (Extra Large)</option>
+      <!-- 3-Tab Switcher -->
+      <div class="px-4 sm:px-5 pt-3 pb-2 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center gap-1.5 shrink-0">
+        <button type="button" id="sysTabBtn-office" onclick="switchSysSettingsTab('office')"
+          class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer">
+          🏛️ ရုံးဌာနဆက်တင်
+        </button>
+        <button type="button" id="sysTabBtn-data" onclick="switchSysSettingsTab('data')"
+          class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer">
+          💾 Data Management (Backup/Restore)
+        </button>
+        <button type="button" id="sysTabBtn-prefs" onclick="switchSysSettingsTab('prefs')"
+          class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer">
+          🎛️ စနစ်နှင့် မြင်ကွင်း
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1">
+        <!-- TAB 1: OFFICE SETTINGS -->
+        <div id="sysTab-office" class="space-y-4">
+          <div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs text-emerald-950 leading-relaxed">
+            🏛️ <strong>ရုံးဌာနသုံး အခြေခံအချက်အလက်များ:</strong> ဤဆက်တင်များသည် ဝဘ်စာမျက်နှာခေါင်းစီး၊ A4 Print လက်မှတ်နေရာ၊ လုပ်ငန်းအသစ်ထည့်ခြင်းနှင့် စာအမှတ်ရှေ့ဆက်တို့တွင် အလိုအလျောက် အသုံးပြုပြီး <strong>AD_Db_Sync</strong> ဖြင့်လည်း Sync ဖြစ်ပါသည်။
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label for="officeSiteTitleInput" class="block text-xs font-bold text-slate-700 mb-1">ဝဘ်ဆိုက် ပင်မခေါင်းစီး (Site Title)</label>
+              <input type="text" id="officeSiteTitleInput" placeholder="ပုပ္ပားတောင်ဥယျာဉ် - ဒေတာဘေ့စ်စနစ်"
+                class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-xs sm:text-sm text-slate-800" />
+            </div>
+            <div>
+              <label for="officeNameInput" class="block text-xs font-bold text-slate-700 mb-1">ရုံးဌာနအမည် (Office Name)</label>
+              <input type="text" id="officeNameInput" placeholder="ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး"
+                class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-xs sm:text-sm text-slate-800" />
+            </div>
+            <div>
+              <label for="officeOfficerNameInput" class="block text-xs font-bold text-slate-700 mb-1">တာဝန်ခံအရာရှိ အမည် (Print လက်မှတ်အတွက်)</label>
+              <input type="text" id="officeOfficerNameInput" placeholder="ဥပမာ - ဒေါက်တာ/ဦး/ဒေါ် ... (ချန်လှပ်နိုင်)"
+                class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-xs sm:text-sm text-slate-800" />
+            </div>
+            <div>
+              <label for="officeOfficerTitleInput" class="block text-xs font-bold text-slate-700 mb-1">ရာထူးအမည် (Signatory Title)</label>
+              <input type="text" id="officeOfficerTitleInput" placeholder="ဥယျာဉ်အုပ်ချုပ်ရေးမှူး"
+                class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-xs sm:text-sm text-slate-800" />
+            </div>
+            <div>
+              <label for="officeDefaultRecipInput" class="block text-xs font-bold text-slate-700 mb-1">မူလ ပေးပို့ရမည့်ဌာန (Default Recipient)</label>
+              <input type="text" id="officeDefaultRecipInput" placeholder="ညွှန်ကြားရေးမှူးရုံး၊ နေပြည်တော်"
+                class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-xs sm:text-sm text-slate-800" />
+            </div>
+            <div>
+              <label for="officeRefPrefixInput" class="block text-xs font-bold text-slate-700 mb-1">မူလ စာအမှတ်ရှေ့ဆက် (Default Ref Prefix)</label>
+              <input type="text" id="officeRefPrefixInput" placeholder="ဥပမာ - စာအမှတ် .../ပုပ္ပား/"
+                class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-xs sm:text-sm text-slate-800" />
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div>
+              <div class="text-xs font-bold text-slate-800">⏰ Backup ပြုလုပ်ရန် သတိပေးကာလ (Backup Reminder)</div>
+              <div class="text-[11px] text-slate-500">သတ်မှတ်ရက်ကျော်လွန်သည်အထိ Backup မလုပ်ရသေးပါက သတိပေးမည်</div>
+            </div>
+            <select id="officeBackupRemindSelect"
+              class="px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-800">
+              <option value="7">၇ ရက်တစ်ကြိမ် (အကြံပြု)</option>
+              <option value="14">၁၄ ရက်တစ်ကြိမ်</option>
+              <option value="30">၃၀ ရက်တစ်ကြိမ်</option>
+              <option value="0">သတိပေးမှု ပိတ်ထားမည်</option>
             </select>
           </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5">📐 ကတ်အကွာအဝေး (Layout Density)</label>
-            <select id="prefDensity" onchange="updatePref('density', this.value)"
-              class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white font-semibold">
-              <option value="comfortable">ကျယ်ဝန်းသောပုံစံ (Comfortable)</option>
-              <option value="compact">ကျစ်လျစ်သောပုံစံ (Compact)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5">🔄 Cloud Auto-Sync ကြိမ်နှုန်း</label>
-            <select id="prefSyncInterval" onchange="updatePref('syncIntervalSec', Number(this.value))"
-              class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white font-semibold">
-              <option value="15">၁၅ စက္ကန့်တစ်ကြိမ် (အမြန်)</option>
-              <option value="30">၃၀ စက္ကန့်တစ်ကြိမ်</option>
-              <option value="60">၁ မိနစ်တစ်ကြိမ်</option>
-              <option value="0">ကိုယ်တိုင်နှိပ်မှ Sync မည်</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5">🧭 စဖွင့်ချိန် မူလမြင်ကွင်း</label>
-            <select id="prefDefaultView" onchange="updatePref('defaultView', this.value)"
-              class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white font-semibold">
-              <option value="daily">📋 နေ့စဉ်အစီအစဉ်</option>
-              <option value="calendar">📅 ပြက္ခဒိန်</option>
-              <option value="table">📊 စုစည်းဇယား</option>
-            </select>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+            <button type="button" onclick="resetOfficeProfileDefault()"
+              class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-700 text-slate-700 text-xs font-bold cursor-pointer">
+              ↺ မူလရုံးအမည် ပြန်ထားမည်
+            </button>
+            <button type="button" onclick="saveOfficeProfileSettings()"
+              class="px-5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-bold shadow-sm cursor-pointer">
+              ✓ ရုံးဆက်တင် သိမ်းဆည်းမည်
+            </button>
           </div>
         </div>
 
-        <!-- Keyboard Shortcuts Reference -->
-        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-          <div class="text-xs font-bold text-slate-800">⌨️ အမြန်သုံး Keyboard Shortcuts</div>
-          <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-600">
-            <div><kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 font-mono font-bold">/</kbd> ရှာဖွေရန်အကွက်</div>
-            <div><kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 font-mono font-bold">Alt + N</kbd> လုပ်ငန်းအသစ်ထည့်</div>
-            <div><kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 font-mono font-bold">Alt + L</kbd> ချက်ချင်းလော့ခ်ချ</div>
-            <div><kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 font-mono font-bold">Alt + D</kbd> White/Dark ပြောင်း</div>
-            <div><kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 font-mono font-bold">Esc</kbd> ဝင်းဒိုးများပိတ်</div>
+        <!-- TAB 2: DATA MANAGEMENT (BACKUP / EXPORT / VALIDATED RESTORE / RESET) -->
+        <div id="sysTab-data" class="hidden space-y-4">
+          <!-- Database Stats & Storage Health -->
+          <div class="p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-blue-50/60 border border-emerald-200 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="text-xs sm:text-sm font-bold text-emerald-950">📊 ဒေတာဘေ့စ် အခြေအနေနှင့် Storage အသုံးပြုမှု</h4>
+              <span id="dmLastBackupPill" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900">Backup မလုပ်ရသေးပါ</span>
+            </div>
+
+            <div id="dmStatsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-center"></div>
+
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-[11px] font-semibold text-slate-700">
+                <span>Browser LocalStorage အသုံးပြုမှု</span>
+                <span id="dmStorageText">0 KB / 5,120 KB</span>
+              </div>
+              <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div id="dmStorageBar" class="h-full bg-emerald-600 rounded-full transition-all" style="width: 1%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Export & Backup Actions -->
+          <div class="p-4 rounded-2xl border border-slate-200 bg-white space-y-3">
+            <h4 class="text-xs sm:text-sm font-bold text-slate-900">💾 Backup နှင့် Export ထုတ်ယူခြင်း</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <button type="button" onclick="exportBackupJSON()"
+                class="p-3 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-left flex items-center gap-2.5 transition cursor-pointer">
+                <span class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 text-base">💾</span>
+                <div>
+                  <div class="text-xs font-bold text-blue-900">Full JSON Backup (.json)</div>
+                  <div class="text-[11px] text-slate-600">SHA-256 Checksum ပါဝင် • စနစ်အပြည့်အစုံ</div>
+                </div>
+              </button>
+              <button type="button" onclick="exportEncryptedBackup()"
+                class="p-3 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-left flex items-center gap-2.5 transition cursor-pointer">
+                <span class="w-9 h-9 rounded-xl bg-amber-600 text-white flex items-center justify-center shrink-0 text-base">🔐</span>
+                <div>
+                  <div class="text-xs font-bold text-amber-950">ကုဒ်ဝှက် Vault Backup (.popaenc)</div>
+                  <div class="text-[11px] text-slate-600">SHA-256 + HMAC Passphrase ဖြင့်</div>
+                </div>
+              </button>
+              <button type="button" onclick="exportCSV(false)"
+                class="p-3 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-left flex items-center gap-2.5 transition cursor-pointer">
+                <span class="w-9 h-9 rounded-xl bg-emerald-700 text-white flex items-center justify-center shrink-0 text-base">📊</span>
+                <div>
+                  <div class="text-xs font-bold text-emerald-950">Excel CSV (လက်ရှိစစ်ထုတ်မှု)</div>
+                  <div class="text-[11px] text-slate-600">UTF-8 BOM • လက်ရှိမြင်ကွင်းအတိုင်း</div>
+                </div>
+              </button>
+              <button type="button" onclick="exportCSV(true)"
+                class="p-3 rounded-xl border border-teal-200 bg-teal-50 hover:bg-teal-100 text-left flex items-center gap-2.5 transition cursor-pointer">
+                <span class="w-9 h-9 rounded-xl bg-teal-700 text-white flex items-center justify-center shrink-0 text-base">📚</span>
+                <div>
+                  <div class="text-xs font-bold text-teal-950">Excel CSV (၅၃ လစလုံး အပြည့်)</div>
+                  <div class="text-[11px] text-slate-600">၂၀၂၆-၂၀၃၁ မှတ်တမ်းအားလုံးထုတ်ရန်</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Validated Restore (Import) & Safety Snapshot -->
+          <div class="p-4 rounded-2xl border border-indigo-200 bg-indigo-50/35 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 class="text-xs sm:text-sm font-bold text-slate-900">📂 Backup ပြန်သွင်းခြင်း (Validated Restore)</h4>
+                <p class="text-[11px] text-slate-600">ဖိုင်ပုံစံနှင့် SHA-256 Integrity စစ်ဆေးပြီးမှသာ သွင်းပေး၍ မူလဒေတာမပျက်စီးအောင် Snapshot အလိုအလျောက်သိမ်းပေးသည်</p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 text-xs">
+              <label class="inline-flex items-center gap-1.5 cursor-pointer font-semibold text-slate-700">
+                <input type="radio" name="restoreModeRadio" value="merge" checked onchange="setRestoreMode('merge')" class="accent-emerald-700 cursor-pointer" />
+                <span>🔄 Smart Merge (ပေါင်းစပ်သွင်းမည် - အကြံပြု)</span>
+              </label>
+              <label class="inline-flex items-center gap-1.5 cursor-pointer font-semibold text-slate-700">
+                <input type="radio" name="restoreModeRadio" value="replace" onchange="setRestoreMode('replace')" class="accent-amber-600 cursor-pointer" />
+                <span>♻️ Full Replace (Backup အတိုင်း အစားထိုးမည်)</span>
+              </label>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="triggerImportJSON()"
+                class="px-4 py-2 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold shadow-xs cursor-pointer">
+                📂 .JSON / .popaenc ဖိုင်ရွေး၍ ပြန်သွင်းမည်
+              </button>
+              <button type="button" id="dmUndoSnapshotBtn" onclick="restorePreSafetySnapshot()"
+                class="hidden px-3.5 py-2 rounded-xl bg-white hover:bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold cursor-pointer">
+                ↺ နောက်ဆုံး Safety Snapshot ပြန်ယူမည်
+              </button>
+            </div>
+          </div>
+
+          <!-- Controlled Data Maintenance (2-Step Confirmation + Engineering Guard) -->
+          <div class="p-4 rounded-2xl border border-rose-200 bg-rose-50/40 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 class="text-xs sm:text-sm font-bold text-rose-800">⚠️ ဒေတာရှင်းလင်းရေး (2-Step Protected Maintenance)</h4>
+                <p class="text-[11px] text-rose-700/85">အရေးကြီးလုပ်ဆောင်ချက်များဖြစ်၍ နှစ်ဆင့်အတည်ပြုချက်နှင့် Engineering Passcode ခံထားပါသည်</p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="toggleResetConfirmPanel()"
+                class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold cursor-pointer">
+                🗑️ စက်တွင်းဒေတာများ မူလအတိုင်း ပြန်ရှင်းမည် (Factory Reset)
+              </button>
+            </div>
+
+            <!-- Step-2 Inline Confirmation Box (No browser prompt/confirm) -->
+            <div id="dmResetConfirmBox" class="hidden p-3.5 rounded-xl bg-white border border-rose-300 space-y-2.5">
+              <div class="text-xs font-bold text-rose-800">
+                ⚠️ အတည်ပြုချက် (အဆင့် ၂): ပြီးစီးမှတ်တမ်း၊ စာအမှတ်၊ ပြင်ဆင်ချက်နှင့် ထပ်တိုးလုပ်ငန်းအားလုံး ရှင်းလင်းရန် အောက်တွင် <code class="px-1.5 py-0.5 rounded bg-rose-100">RESET</code> ဟု ရိုက်ထည့်ပါ (Safety Snapshot ကို အလိုအလျောက် သိမ်းထားပေးမည်)။
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <input type="text" id="dmResetConfirmInput" placeholder="RESET ဟု ရိုက်ထည့်ပါ"
+                  class="flex-1 min-w-[160px] px-3 py-1.5 rounded-xl border border-rose-300 text-xs font-mono font-bold text-rose-900" />
+                <button type="button" onclick="executeFactoryDataReset()"
+                  class="px-4 py-1.5 rounded-xl bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold cursor-pointer">
+                  ✓ အတည်ပြု ရှင်းလင်းမည်
+                </button>
+                <button type="button" onclick="toggleResetConfirmPanel(false)"
+                  class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer">
+                  မလုပ်တော့ပါ
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="flex justify-end pt-2 border-t border-slate-100">
-          <button type="button" onclick="closeSysSettingsModal()" class="px-5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-bold cursor-pointer">
-            ✓ ပြီးပါပြီ
-          </button>
+        <!-- TAB 3: SYSTEM & DISPLAY PREFERENCES -->
+        <div id="sysTab-prefs" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">🔤 စာလုံးအရွယ်အစား (Font Scale)</label>
+              <select id="prefFontScale" onchange="updatePref('fontScale', this.value)"
+                class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white font-semibold">
+                <option value="normal">ပုံမှန် (Standard)</option>
+                <option value="lg">အကြီး (Large)</option>
+                <option value="xl">အထူးကြီး (Extra Large)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">📐 ကတ်အကွာအဝေး (Layout Density)</label>
+              <select id="prefDensity" onchange="updatePref('density', this.value)"
+                class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white font-semibold">
+                <option value="comfortable">ကျယ်ဝန်းသောပုံစံ (Comfortable)</option>
+                <option value="compact">ကျစ်လျစ်သောပုံစံ (Compact)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">🔄 Cloud Auto-Sync ကြိမ်နှုန်း</label>
+              <select id="prefSyncInterval" onchange="updatePref('syncIntervalSec', Number(this.value))"
+                class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white font-semibold">
+                <option value="15">၁၅ စက္ကန့်တစ်ကြိမ် (အမြန်)</option>
+                <option value="30">၃၀ စက္ကန့်တစ်ကြိမ်</option>
+                <option value="60">၁ မိနစ်တစ်ကြိမ်</option>
+                <option value="0">ကိုယ်တိုင်နှိပ်မှ Sync မည်</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">🧭 စဖွင့်ချိန် မူလမြင်ကွင်း</label>
+              <select id="prefDefaultView" onchange="updatePref('defaultView', this.value)"
+                class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white font-semibold">
+                <option value="daily">📋 နေ့စဉ်အစီအစဉ်</option>
+                <option value="calendar">📅 ပြက္ခဒိန်</option>
+                <option value="table">📊 စုစည်းဇယား</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Keyboard Shortcuts Reference -->
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="text-xs font-bold text-slate-800">⌨️ အမြန်သုံး Keyboard Shortcuts</div>
+            <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-600">
+              <div><kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 font-mono font-bold">/</kbd> ရှာဖွေရန်အကွက်</div>
+              <div><kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 font-mono font-bold">Alt + N</kbd> လုပ်ငန်းအသစ်ထည့်</div>
+              <div><kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 font-mono font-bold">Alt + L</kbd> ချက်ချင်းလော့ခ်ချ</div>
+              <div><kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 font-mono font-bold">Alt + D</kbd> White/Dark ပြောင်း</div>
+              <div><kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 font-mono font-bold">Esc</kbd> ဝင်းဒိုးများပိတ်</div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-end shrink-0">
+        <button type="button" onclick="closeSysSettingsModal()" class="px-5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-bold cursor-pointer">
+          ✓ ပိတ်မည်
+        </button>
       </div>
     </div>
   </div>
@@ -2100,9 +2462,25 @@
         <div id="appLockError" class="hidden text-xs font-semibold text-rose-300 bg-rose-950/60 border border-rose-500/40 px-3 py-2 rounded-xl text-center"></div>
         <button type="submit" id="appUnlockBtn"
           class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-sm shadow-lg transition cursor-pointer">
-          🔓 သော့ဖွင့်ဝင်ရောက်မည်
+          🔓 Passcode ဖြင့် သော့ဖွင့်မည်
         </button>
       </form>
+
+      <div id="appLockBioWrap" class="hidden space-y-2">
+        <div class="flex items-center gap-2 text-[11px] text-emerald-200/70">
+          <span class="flex-1 h-px bg-white/15"></span>
+          <span>သို့မဟုတ်</span>
+          <span class="flex-1 h-px bg-white/15"></span>
+        </div>
+        <button type="button" id="appUnlockBioBtn" onclick="unlockAppWithBiometric()"
+          class="w-full py-3 rounded-xl bg-sky-500/25 hover:bg-sky-500/40 border border-sky-300/50 text-sky-100 font-bold text-sm flex items-center justify-center gap-2 shadow-md transition cursor-pointer">
+          <span>👆</span>
+          <span>Fingerprint / Face ID ဖြင့် သော့ဖွင့်မည်</span>
+        </button>
+      </div>
+      <div id="appLockBioHint" class="hidden text-center text-[11px] text-amber-200/85 bg-amber-500/10 border border-amber-300/25 px-3 py-1.5 rounded-xl">
+        Local file ဖြစ်သဖြင့် Passcode ဖြင့် သော့ဖွင့်ပါ (Biometric သည် HTTPS တွင် အလုပ်လုပ်သည်)
+      </div>
 
       <div class="text-center text-[11px] text-emerald-200/70 pt-1 border-t border-white/10">
         Passcode ၅ ကြိမ်မှားယွင်းပါက Brute-Force ကာကွယ်ရေးအရ ခေတ္တပိတ်ဆို့ပါမည်
@@ -2130,6 +2508,7 @@
     const STORAGE_BG_KEY   = 'popa_park_header_bg_v1';
     const STORAGE_SEC_KEY  = 'popa_park_security_v1';
     const STORAGE_AUDIT_KEY = 'popa_park_audit_log_v1';
+    const STORAGE_SNAPSHOT_KEY = 'popa_park_pre_restore_snapshot_v1';
     const MM_DIGITS = ['၀', '၁', '၂', '၃', '၄', '၅', '၆', '၇', '၈', '၉'];
     const MM_MONTHS = [
       '', 'ဇန်နဝါရီ', 'ဖေဖော်ဝါရီ', 'မတ်', 'ဧပြီ', 'မေ', 'ဇွန်',
@@ -2240,15 +2619,8 @@
       }
     ];
 
-    // Department Styles & Filter Order
+    // Department Styles & Filter Order (အုပ်ချုပ်ရေးမှူး တာဝန်များကို စီမံဌာနစိတ်အောက်သို့ ပြောင်းရွှေ့ပြီး)
     const DEPARTMENTS = {
-      'အုပ်ချုပ်ရေးမှူး': {
-        key: 'အုပ်ချုပ်ရေးမှူး',
-        badge: 'bg-amber-50 text-amber-900 border-amber-300',
-        pillActive: 'bg-amber-600 text-white border-amber-600 shadow-sm',
-        dot: 'bg-amber-500',
-        bar: 'bg-amber-500'
-      },
       'ငွေစာရင်း': {
         key: 'ငွေစာရင်း',
         badge: 'bg-purple-50 text-purple-800 border-purple-200',
@@ -2271,10 +2643,13 @@
         bar: 'bg-emerald-600'
       }
     };
-    const DEPT_ORDER = ['အုပ်ချုပ်ရေးမှူး', 'ငွေစာရင်း', 'စီမံ', 'လုပ်ငန်း'];
+    const DEPT_ORDER = ['ငွေစာရင်း', 'စီမံ', 'လုပ်ငန်း'];
 
-    // Normalize legacy department name ('ဥယျာဉ်အုပ်ချုပ်ရေးမှူး' -> 'အုပ်ချုပ်ရေးမှူး')
-    const normalizeDept = (d) => (d === 'ဥယျာဉ်အုပ်ချုပ်ရေးမှူး' ? 'အုပ်ချုပ်ရေးမှူး' : (DEPARTMENTS[d] ? d : 'လုပ်ငန်း'));
+    // Normalize legacy department names ('အုပ်ချုပ်ရေးမှူး' & 'ဥယျာဉ်အုပ်ချုပ်ရေးမှူး' -> 'စီမံ')
+    const normalizeDept = (d) => {
+      if (d === 'အုပ်ချုပ်ရေးမှူး' || d === 'ဥယျာဉ်အုပ်ချုပ်ရေးမှူး') return 'စီမံ';
+      return DEPARTMENTS[d] ? d : 'လုပ်ငန်း';
+    };
 
     // Copyable Google Apps Script Code (Cell A1 + Optional SHA-256 API Secret Auth + text/plain POST)
     const APPS_SCRIPT_TEMPLATE = `/** @OnlyCurrentDoc */
@@ -2475,15 +2850,15 @@ function doPost(e) {
     ];
 
     const MONTHLY_RULES = [
-      // Park Warden / Admin (အုပ်ချုပ်ရေးမှူး)
+      // Park Warden / Admin Duties (စီမံဌာနစိတ်အောက်သို့ ပြောင်းရွှေ့သတ်မှတ်ပြီး)
       {
-        code: 'm_02_diary2', day: 2, dept: 'အုပ်ချုပ်ရေးမှူး', priority: 'high',
+        code: 'm_02_diary2', day: 2, dept: 'စီမံ', priority: 'high',
         title: 'ဥယျာဉ်အုပ်ချုပ်ရေးမှူး၏ ဒုတိယအကြိမ် နေ့စဉ်မှတ်တမ်း ပေးပို့တင်ပြခြင်း',
         recipient: 'ညွှန်ကြားရေးမှူးရုံး၊ နေပြည်တော်',
         freq: 'လစဉ် (၂ ရက်)'
       },
       {
-        code: 'm_17_diary1', day: 17, dept: 'အုပ်ချုပ်ရေးမှူး', priority: 'high',
+        code: 'm_17_diary1', day: 17, dept: 'စီမံ', priority: 'high',
         title: 'ဥယျာဉ်အုပ်ချုပ်ရေးမှူး၏ ပထမအကြိမ် နေ့စဉ်မှတ်တမ်း ပေးပို့တင်ပြခြင်း',
         recipient: 'ညွှန်ကြားရေးမှူးရုံး၊ နေပြည်တော်',
         freq: 'လစဉ် (၁၇ ရက်)'
@@ -2714,13 +3089,26 @@ function doPost(e) {
         // { [dbId]: { localPath, driveUrl } }
         items: {},
         updatedAt: 0
+      },
+      officeProfile: {
+        siteTitle: 'ပုပ္ပားတောင်ဥယျာဉ် - ဒေတာဘေ့စ်စနစ်',
+        officeName: 'ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး',
+        officerName: '',
+        officerTitle: 'ဥယျာဉ်အုပ်ချုပ်ရေးမှူး',
+        defaultRecipient: 'ညွှန်ကြားရေးမှူးရုံး၊ နေပြည်တော်',
+        letterRefPrefix: '',
+        backupRemindDays: 7,
+        updatedAt: 0
       }
     };
+
+    const DEFAULT_OFFICE_PROFILE = { ...syncData.officeProfile };
 
     let syncMeta = {
       roomId: 'popa-park-main',
       customSyncUrl: '',
-      apiSecret: ''
+      apiSecret: '',
+      lastBackupAt: 0
     };
 
     let uiState = {
@@ -2730,6 +3118,13 @@ function doPost(e) {
       deptFilter: 'ALL',
       statusFilter: 'ALL',         // 'ALL' | 'PENDING' | 'DONE' | 'OVERDUE'
       searchQuery: '',
+      dateFrom: '',
+      dateTo: '',
+      categoryFilter: 'ALL',       // 'ALL' | 'HIGH' | 'WEEKLY' | 'MONTHLY' | 'PERIODIC' | 'CUSTOM' | 'WITH_NOTE'
+      sortBy: 'DATE_ASC',          // 'DATE_ASC' | 'DATE_DESC' | 'PRIORITY' | 'DEPT'
+      advFilterOpen: false,
+      restoreMode: 'merge',        // 'merge' | 'replace'
+      activeSysTab: 'office',      // 'office' | 'data' | 'prefs'
       dbOpenMode: isMobileDevice() ? 'drive' : 'excel', // 'excel' | 'office' | 'drive'
       dbHubCollapsed: false,
       theme: 'light',              // 'light' | 'dark'
@@ -2748,6 +3143,10 @@ function doPost(e) {
       appPassIter: 5000,
       recoveryHash: '',
       recoverySalt: '',
+      biometricEnabled: false,
+      biometricCredId: '',
+      biometricRegisteredAt: 0,
+      dbAccessLockEnabled: false,
       engLockEnabled: false,
       engPassHash: '',
       engPassSalt: '',
@@ -2762,8 +3161,10 @@ function doPost(e) {
     let auditFilter = 'ALL';
     let isAppLocked = false;
     let engUnlockedUntil = 0;
+    let dbUnlockedUntil = 0;
+    let webAuthnPlatformAvailable = false;
     let engGateCallback = null;
-    let engGateMode = 'eng'; // 'eng' | 'encryptExport' | 'decryptImport'
+    let engGateMode = 'eng'; // 'eng' | 'dbAccess' | 'encryptExport' | 'decryptImport'
     let pendingEncryptedFilePayload = null;
     let lastActivityAt = Date.now();
     let bulkSelectMode = false;
@@ -2829,6 +3230,14 @@ function doPost(e) {
                 updatedAt: Number(parsed.dbConfigs.updatedAt) || 0
               };
             }
+            if (parsed.officeProfile && typeof parsed.officeProfile === 'object') {
+              syncData.officeProfile = {
+                ...DEFAULT_OFFICE_PROFILE,
+                ...parsed.officeProfile,
+                backupRemindDays: Number(parsed.officeProfile.backupRemindDays ?? 7),
+                updatedAt: Number(parsed.officeProfile.updatedAt) || 0
+              };
+            }
           }
         } else {
           // Graceful check for v1 legacy storage key if present
@@ -2860,6 +3269,7 @@ function doPost(e) {
           if (m.roomId) syncMeta.roomId = sanitizeRoomId(m.roomId);
           if (typeof m.customSyncUrl === 'string') syncMeta.customSyncUrl = m.customSyncUrl.trim();
           if (typeof m.apiSecret === 'string') syncMeta.apiSecret = m.apiSecret;
+          if (Number(m.lastBackupAt)) syncMeta.lastBackupAt = Number(m.lastBackupAt);
         }
 
         // 3. Load device-local UI preferences (Open mode, Hub collapsed, Theme & Preferences)
@@ -2936,10 +3346,11 @@ function doPost(e) {
         uiState.selectedCalendarDay = RANGE_START;
       }
 
-      // 6. Apply saved custom header background photo, theme & display preferences
+      // 6. Apply saved custom header background photo, theme, office profile & display preferences
       applySavedHeaderBg();
       applyTheme(uiState.theme);
       applyDisplayPreferences();
+      applyOfficeProfile();
     }
 
     function saveLocalData() {
@@ -3064,6 +3475,216 @@ function doPost(e) {
 
     function sha256Hex(str) {
       return bytesToHex(sha256Bytes(str));
+    }
+
+    /** Native Web Crypto API SHA-256 with automatic offline fallback */
+    async function webCryptoSha256Hex(str) {
+      if (window.crypto && window.crypto.subtle) {
+        try {
+          const data = new TextEncoder().encode(String(str));
+          const digest = await window.crypto.subtle.digest('SHA-256', data);
+          return bytesToHex(new Uint8Array(digest));
+        } catch (_) {}
+      }
+      return sha256Hex(str);
+    }
+
+    function bytesToBase64Url(bytes) {
+      let bin = '';
+      for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+      return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+    }
+
+    function base64UrlToBytes(b64u) {
+      let b64 = String(b64u || '').replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      const bin = atob(b64);
+      const out = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
+    }
+
+    function hasWebCryptoNative() {
+      return Boolean(window.isSecureContext && window.crypto && window.crypto.subtle);
+    }
+
+    function isWebAuthnContextReady() {
+      return Boolean(
+        window.isSecureContext &&
+        window.PublicKeyCredential &&
+        navigator.credentials &&
+        typeof navigator.credentials.create === 'function' &&
+        typeof navigator.credentials.get === 'function'
+      );
+    }
+
+    async function detectWebAuthnSupport() {
+      if (!isWebAuthnContextReady()) {
+        webAuthnPlatformAvailable = false;
+        return false;
+      }
+      try {
+        if (typeof PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable === 'function') {
+          webAuthnPlatformAvailable = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+        } else {
+          webAuthnPlatformAvailable = true;
+        }
+      } catch (_) {
+        webAuthnPlatformAvailable = false;
+      }
+      return webAuthnPlatformAvailable;
+    }
+
+    async function registerBiometricCredential() {
+      if (!securityConfig.appPassHash) {
+        showToast('ဦးစွာ အထက်ပါ Database / App Passcode ကို သတ်မှတ်သိမ်းဆည်းပေးပါ (Backup သော့အဖြစ် လိုအပ်ပါသည်)', 'error');
+        return;
+      }
+      if (!isWebAuthnContextReady()) {
+        showToast('Biometric (Fingerprint/Face ID) သည် HTTPS Website (GitHub Pages / Netlify) တွင်သာ အလုပ်လုပ်ပါသည် — Local file တွင် SHA-256 Passcode ကို အသုံးပြုပါ', 'error');
+        return;
+      }
+
+      const doRegister = async () => {
+        try {
+          const challenge = new Uint8Array(32);
+          window.crypto.getRandomValues(challenge);
+          const userId = new Uint8Array(16);
+          window.crypto.getRandomValues(userId);
+
+          const pubKey = {
+            challenge,
+            rp: {
+              name: getOfficeProfile().siteTitle || 'ပုပ္ပားတောင်ဥယျာဉ် AD-Database'
+            },
+            user: {
+              id: userId,
+              name: 'popa-park-database-user',
+              displayName: getOfficeProfile().officeName || 'AD-Database User'
+            },
+            pubKeyCredParams: [
+              { alg: -7, type: 'public-key' },   // ES256
+              { alg: -257, type: 'public-key' }  // RS256
+            ],
+            authenticatorSelection: {
+              authenticatorAttachment: 'platform',
+              userVerification: 'required',
+              residentKey: 'preferred'
+            },
+            timeout: 60000,
+            attestation: 'none'
+          };
+
+          const cred = await navigator.credentials.create({ publicKey: pubKey });
+          if (!cred || !cred.rawId) throw new Error('Credential not returned');
+
+          securityConfig.biometricEnabled = true;
+          securityConfig.biometricCredId = bytesToBase64Url(new Uint8Array(cred.rawId));
+          securityConfig.biometricRegisteredAt = Date.now();
+          saveSecurityConfig();
+
+          logAudit('SECURITY', 'Biometric Lock (WebAuthn) ချိတ်ဆက်ပြီး', 'Fingerprint / Face ID / Windows Hello registered', 'success');
+          updateSecurityIndicators();
+          renderSecurityModal();
+          showToast('👆 Fingerprint / Face ID (WebAuthn) အောင်မြင်စွာ ချိတ်ဆက်ပြီးပါပြီ', 'success');
+        } catch (err) {
+          console.warn('WebAuthn register error:', err);
+          if (err && err.name === 'NotAllowedError') {
+            showToast('Biometric ချိတ်ဆက်မှုကို ပယ်ဖျက်လိုက်ပါသည်', 'info');
+          } else {
+            showToast('ဤစက်တွင် Platform Biometric (Fingerprint/Face ID) မပံ့ပိုးပါ — SHA-256 Passcode ဖြင့် ဆက်လက်သုံးနိုင်သည်', 'error');
+          }
+        }
+      };
+
+      guardMutation('Biometric Lock (WebAuthn) ချိတ်ဆက်ခြင်း', doRegister, true);
+    }
+
+    async function verifyBiometricCredential() {
+      if (!securityConfig.biometricEnabled || !securityConfig.biometricCredId) {
+        throw new Error('Biometric ချိတ်ဆက်ထားခြင်း မရှိသေးပါ');
+      }
+      if (!isWebAuthnContextReady()) {
+        throw new Error('HTTPS စနစ်တွင်သာ Biometric အလုပ်လုပ်ပါသည် — Passcode ဖြင့် ဝင်ရောက်ပါ');
+      }
+      const challenge = new Uint8Array(32);
+      window.crypto.getRandomValues(challenge);
+      const assertion = await navigator.credentials.get({
+        publicKey: {
+          challenge,
+          allowCredentials: [{
+            id: base64UrlToBytes(securityConfig.biometricCredId),
+            type: 'public-key'
+          }],
+          userVerification: 'required',
+          timeout: 60000
+        }
+      });
+      return Boolean(assertion && assertion.id);
+    }
+
+    async function testBiometricUnlock() {
+      try {
+        const ok = await verifyBiometricCredential();
+        if (ok) {
+          logAudit('SECURITY', 'Biometric စမ်းသပ်စစ်ဆေးမှု အောင်မြင်', 'WebAuthn Platform Verified', 'success');
+          showToast('✓ Fingerprint / Face ID စစ်ဆေးမှု အောင်မြင်ပါသည်!', 'success');
+        }
+      } catch (err) {
+        showToast(err && err.name === 'NotAllowedError' ? 'စစ်ဆေးမှု ပယ်ဖျက်လိုက်ပါသည်' : (err.message || 'Biometric စစ်ဆေးမှု မအောင်မြင်ပါ'), 'error');
+      }
+    }
+
+    function disableBiometricLock() {
+      guardMutation('Biometric Lock ဖြုတ်ခြင်း', () => {
+        securityConfig.biometricEnabled = false;
+        securityConfig.biometricCredId = '';
+        securityConfig.biometricRegisteredAt = 0;
+        saveSecurityConfig();
+        logAudit('SECURITY', 'Biometric Lock ဖြုတ်လိုက်ပြီး', 'WebAuthn credential removed', 'warn');
+        updateSecurityIndicators();
+        renderSecurityModal();
+        showToast('Biometric Lock (Fingerprint/Face ID) ကို ဖြုတ်လိုက်ပါပြီ', 'info');
+      }, true);
+    }
+
+    function toggleDbAccessLock(checked) {
+      if (checked && !securityConfig.appPassHash) {
+        const chk = document.getElementById('dbAccessLockChk');
+        if (chk) chk.checked = false;
+        showToast('ဦးစွာ Database / App Passcode သတ်မှတ်သိမ်းဆည်းပေးပါ', 'error');
+        return;
+      }
+      const applyToggle = () => {
+        securityConfig.dbAccessLockEnabled = Boolean(checked);
+        if (!checked) dbUnlockedUntil = 0;
+        saveSecurityConfig();
+        logAudit('SECURITY', checked ? 'Database File Access Lock ဖွင့်ပြီး' : 'Database File Access Lock ပိတ်ပြီး', '', 'info');
+        updateSecurityIndicators();
+        renderSecurityModal();
+        showToast(checked ? '📂 Database ဖိုင်ဖွင့်တိုင်း Passcode / Biometric စစ်ဆေးပါမည်' : 'Database ဖိုင်တိုက်ရိုက်ဖွင့်ခွင့် ပြန်ဖွင့်ပြီးပါပြီ', 'info');
+      };
+
+      if (!checked && securityConfig.engLockEnabled && securityConfig.engPassHash && Date.now() >= engUnlockedUntil) {
+        const chk = document.getElementById('dbAccessLockChk');
+        if (chk) chk.checked = true;
+        openEngGateModal('eng', 'Database Access Lock ပိတ်ခြင်း', applyToggle);
+        return;
+      }
+      applyToggle();
+    }
+
+    /** Database File Access Gate (Passcode OR WebAuthn Biometric) */
+    function guardDatabaseAccess(dbTitle, callback) {
+      const needGate = Boolean(
+        securityConfig.dbAccessLockEnabled &&
+        (securityConfig.appPassHash || (securityConfig.biometricEnabled && securityConfig.biometricCredId))
+      );
+      if (!needGate || Date.now() < dbUnlockedUntil) {
+        callback();
+        return;
+      }
+      openEngGateModal('dbAccess', dbTitle, callback);
     }
 
     function hmacSha256Bytes(keyBytes, msgBytes) {
@@ -3197,15 +3818,20 @@ function doPost(e) {
       return plainText;
     }
 
-    function computeDatabaseFingerprint() {
+    function computePayloadFingerprint(obj) {
+      const src = obj || syncData;
       const canonical = JSON.stringify({
-        t: syncData.taskStates,
-        o: syncData.taskOverrides,
-        d: syncData.deletedTasks,
-        c: syncData.customTasks,
-        s: syncData.settings
+        t: src.taskStates || {},
+        o: src.taskOverrides || {},
+        d: src.deletedTasks || {},
+        c: Array.isArray(src.customTasks) ? src.customTasks : [],
+        s: src.settings || {}
       });
       return sha256Hex(canonical);
+    }
+
+    function computeDatabaseFingerprint() {
+      return computePayloadFingerprint(syncData);
     }
 
     /** Audit Trail Logger */
@@ -3227,23 +3853,26 @@ function doPost(e) {
       const isHttps = window.location.protocol === 'https:' || window.location.hostname === 'localhost';
       const syncHttps = !syncMeta.customSyncUrl || syncMeta.customSyncUrl.startsWith('https://');
       const hasAppLock = Boolean(securityConfig.appLockEnabled && securityConfig.appPassHash);
+      const hasBiometric = Boolean(securityConfig.biometricEnabled && securityConfig.biometricCredId);
+      const hasDbGate = Boolean(securityConfig.dbAccessLockEnabled && (hasAppLock || hasBiometric));
       const hasEngLock = Boolean(securityConfig.engLockEnabled && securityConfig.engPassHash);
       const hasAutoLock = hasAppLock && Number(securityConfig.autoLockMin) > 0;
       const hasApiSecret = Boolean(syncMeta.apiSecret && syncMeta.apiSecret.trim().length >= 6);
 
-      let score = 15; // Baseline SHA-256 Integrity Engine
+      let score = 15; // Baseline Web Crypto SHA-256 / PBKDF2 Integrity Engine
       if (isHttps && syncHttps) score += 15;
-      if (hasAppLock) score += 25;
+      if (hasAppLock) score += 20;
       if (hasEngLock) score += 25;
-      if (hasAutoLock) score += 10;
-      if (hasApiSecret) score += 10;
+      if (hasBiometric || hasDbGate) score += 10;
+      if (hasAutoLock) score += 8;
+      if (hasApiSecret) score += 7;
       score = Math.min(100, score);
 
       let grade = 'အားနည်း (Vulnerable)', gradeCls = 'bg-rose-100 text-rose-700', barCls = 'bg-rose-600';
       if (score >= 85) { grade = 'အလွန်လုံခြုံ (Fortified)'; gradeCls = 'bg-emerald-100 text-emerald-800'; barCls = 'bg-emerald-600'; }
       else if (score >= 55) { grade = 'သင့်တင့် (Protected)'; gradeCls = 'bg-amber-100 text-amber-800'; barCls = 'bg-amber-500'; }
 
-      return { score, grade, gradeCls, barCls, isHttps, syncHttps, hasAppLock, hasEngLock, hasAutoLock, hasApiSecret };
+      return { score, grade, gradeCls, barCls, isHttps, syncHttps, hasAppLock, hasBiometric, hasDbGate, hasEngLock, hasAutoLock, hasApiSecret };
     }
 
     function updateSecurityIndicators() {
@@ -3322,12 +3951,15 @@ function doPost(e) {
       const iconEl = document.getElementById('engGateIcon');
       const lblEl = document.getElementById('engGateInputLabel');
       const sessRow = document.getElementById('engGateSessionRow');
+      const sessLbl = document.getElementById('engGateRememberLabel');
+      const bioWrap = document.getElementById('engGateBioWrap');
       const submitBtn = document.getElementById('engGateSubmitBtn');
       const errEl = document.getElementById('engGateError');
       const inp = document.getElementById('engGateInput');
 
       errEl.classList.add('hidden');
       inp.value = '';
+      if (bioWrap) bioWrap.classList.add('hidden');
 
       if (mode === 'encryptExport') {
         iconEl.textContent = '🔐';
@@ -3343,17 +3975,52 @@ function doPost(e) {
         lblEl.textContent = 'Backup Passphrase ထည့်သွင်းပါ';
         sessRow.classList.add('hidden');
         submitBtn.textContent = '🔓 ဖွင့်၍ပေါင်းစပ်မည်';
+      } else if (mode === 'dbAccess') {
+        iconEl.textContent = '📂';
+        titleEl.textContent = 'Database ဝင်ရောက်ခွင့် အတည်ပြုရန်';
+        descEl.textContent = `"${actionLabel}" ကို ဖွင့်လှစ်ရန် Database Passcode (သို့မဟုတ်) Biometric Lock ဖြင့် အတည်ပြုပါ။`;
+        lblEl.textContent = 'Database / App Passcode (Web Crypto SHA-256)';
+        sessRow.classList.remove('hidden');
+        if (sessLbl) sessLbl.textContent = '၁၀ မိနစ်အတွင်း ထပ်မံမတောင်းဘဲ Database ဝင်ခွင့်ဖွင့်ထားမည်';
+        if (bioWrap && securityConfig.biometricEnabled && securityConfig.biometricCredId && isWebAuthnContextReady()) {
+          bioWrap.classList.remove('hidden');
+        }
+        submitBtn.textContent = '🔓 ဖွင့်လှစ်မည်';
       } else {
         iconEl.textContent = '🛠️';
-        titleEl.textContent = 'Engineering Passcode အတည်ပြုရန်';
-        descEl.textContent = `"${actionLabel}" လုပ်ဆောင်ရန် Database Engineering Passcode ကို ထည့်သွင်းအတည်ပြုပါ။`;
-        lblEl.textContent = 'Engineering Passcode (PBKDF2-SHA256)';
+        titleEl.textContent = 'Admin / Engineering Passcode အတည်ပြုရန်';
+        descEl.textContent = `"${actionLabel}" လုပ်ဆောင်ရန် သီးသန့် Admin / Engineering Passcode ကို ထည့်သွင်းအတည်ပြုပါ။`;
+        lblEl.textContent = 'Admin / Engineering Passcode (Web Crypto SHA-256)';
         sessRow.classList.remove('hidden');
+        if (sessLbl) sessLbl.textContent = '၁၀ မိနစ်အတွင်း ထပ်မံမတောင်းဘဲ Admin Engineering Mode ဖွင့်ထားမည်';
         submitBtn.textContent = '✓ အတည်ပြုမည်';
       }
 
       document.getElementById('engGateModal').classList.remove('hidden');
       setTimeout(() => inp.focus(), 60);
+    }
+
+    async function unlockEngGateWithBiometric() {
+      const errEl = document.getElementById('engGateError');
+      errEl.classList.add('hidden');
+      try {
+        const ok = await verifyBiometricCredential();
+        if (ok) {
+          if (document.getElementById('engGateRememberChk')?.checked) {
+            dbUnlockedUntil = Date.now() + 10 * 60 * 1000;
+          }
+          logAudit('SECURITY', 'Biometric ဖြင့် Database ဝင်ခွင့်အတည်ပြုပြီး', 'WebAuthn Verified', 'success');
+          const cb = engGateCallback;
+          closeEngGateModal();
+          updateSecurityIndicators();
+          if (typeof cb === 'function') cb();
+        }
+      } catch (err) {
+        errEl.textContent = err && err.name === 'NotAllowedError'
+          ? 'Biometric စစ်ဆေးမှု ပယ်ဖျက်လိုက်ပါသည် — Passcode ဖြင့် ဝင်ရောက်နိုင်ပါသည်။'
+          : (err.message || 'Biometric စစ်ဆေးမှု မအောင်မြင်ပါ — Passcode ဖြင့် ဝင်ရောက်ပါ။');
+        errEl.classList.remove('hidden');
+      }
     }
 
     function closeEngGateModal() {
@@ -3385,9 +4052,13 @@ function doPost(e) {
         try {
           const plainText = await decryptPayloadWithPassphrase(pendingEncryptedFilePayload, val);
           const payload = JSON.parse(plainText);
-          mergeRemoteState(payload);
+          savePreRestoreSnapshot('Before Encrypted Vault Restore');
+          if (uiState.restoreMode === 'replace') applyFullReplaceData(payload);
+          else mergeRemoteState(payload);
           saveLocalData();
+          applyOfficeProfile();
           renderAll();
+          refreshDataManagementUI();
           scheduleCloudPush();
           logAudit('SECURITY', 'ကုဒ်ဝှက် Backup ပြန်သွင်းပြီး', 'SHA-256 + HMAC စစ်ဆေးမှုအောင်မြင်', 'success');
           closeEngGateModal();
@@ -3401,11 +4072,37 @@ function doPost(e) {
         return;
       }
 
-      // Engineering Passcode Verification + Brute-Force Protection
+      // Passcode Verification (Database Access Mode OR Admin/Engineering Mode) + Brute-Force Protection
       if (Date.now() < securityConfig.lockoutUntil) {
         const secs = Math.ceil((securityConfig.lockoutUntil - Date.now()) / 1000);
         errEl.textContent = `အကြိမ်ရေများစွာ မှားယွင်းထားသဖြင့် ${toMM(secs)} စက္ကန့် စောင့်ဆိုင်းပါ။`;
         errEl.classList.remove('hidden');
+        return;
+      }
+
+      if (engGateMode === 'dbAccess') {
+        const dbHash = await pbkdf2Sha256Hex(val, securityConfig.appPassSalt, securityConfig.appPassIter || 5000);
+        if (safeEqualHex(dbHash, securityConfig.appPassHash)) {
+          securityConfig.failedAttempts = 0;
+          securityConfig.lockoutUntil = 0;
+          saveSecurityConfig();
+          if (document.getElementById('engGateRememberChk').checked) {
+            dbUnlockedUntil = Date.now() + 10 * 60 * 1000;
+          }
+          logAudit('SECURITY', 'Database ဝင်ခွင့် Passcode မှန်ကန်', 'PBKDF2-SHA256 Verified', 'success');
+          const cb = engGateCallback;
+          closeEngGateModal();
+          updateSecurityIndicators();
+          if (typeof cb === 'function') cb();
+        } else {
+          securityConfig.failedAttempts = (securityConfig.failedAttempts || 0) + 1;
+          if (securityConfig.failedAttempts >= 5) securityConfig.lockoutUntil = Date.now() + 60 * 1000;
+          saveSecurityConfig();
+          logAudit('SECURITY', 'Database ဝင်ခွင့် Passcode မှားယွင်း', `မှားယွင်းမှု အကြိမ် ${securityConfig.failedAttempts}`, 'danger');
+          errEl.textContent = `Database Passcode မှားယွင်းနေပါသည် (မှားယွင်းမှု ${toMM(securityConfig.failedAttempts)}/၅ ကြိမ်)`;
+          errEl.classList.remove('hidden');
+          card.classList.remove('shake-error'); void card.offsetWidth; card.classList.add('shake-error');
+        }
         return;
       }
 
@@ -3417,7 +4114,7 @@ function doPost(e) {
         if (document.getElementById('engGateRememberChk').checked) {
           engUnlockedUntil = Date.now() + 10 * 60 * 1000;
         }
-        logAudit('SECURITY', 'Engineering Mode ဖွင့်လှစ်ပြီး', 'PBKDF2-SHA256 Passcode မှန်ကန်', 'success');
+        logAudit('SECURITY', 'Admin Engineering Mode ဖွင့်လှစ်ပြီး', 'PBKDF2-SHA256 Admin Passcode မှန်ကန်', 'success');
         const cb = engGateCallback;
         closeEngGateModal();
         updateSecurityIndicators();
@@ -3428,8 +4125,8 @@ function doPost(e) {
           securityConfig.lockoutUntil = Date.now() + 60 * 1000;
         }
         saveSecurityConfig();
-        logAudit('SECURITY', 'Engineering Passcode မှားယွင်း', `မှားယွင်းမှု အကြိမ် ${securityConfig.failedAttempts}`, 'danger');
-        errEl.textContent = `Engineering Passcode မှားယွင်းနေပါသည် (မှားယွင်းမှု ${toMM(securityConfig.failedAttempts)}/၅ ကြိမ်)`;
+        logAudit('SECURITY', 'Admin Engineering Passcode မှားယွင်း', `မှားယွင်းမှု အကြိမ် ${securityConfig.failedAttempts}`, 'danger');
+        errEl.textContent = `Admin / Engineering Passcode မှားယွင်းနေပါသည် (မှားယွင်းမှု ${toMM(securityConfig.failedAttempts)}/၅ ကြိမ်)`;
         errEl.classList.remove('hidden');
         card.classList.remove('shake-error'); void card.offsetWidth; card.classList.add('shake-error');
       }
@@ -3446,17 +4143,48 @@ function doPost(e) {
     function lockAppNow() {
       if (!securityConfig.appLockEnabled || !securityConfig.appPassHash) {
         openSecurityModal();
-        showToast('ဦးစွာ App Access Passcode သတ်မှတ်ပေးပါ', 'info');
+        showToast('ဦးစွာ Database / App Passcode သတ်မှတ်ပေးပါ', 'info');
         return;
       }
       isAppLocked = true;
       engUnlockedUntil = 0;
+      dbUnlockedUntil = 0;
       document.getElementById('appLockError').classList.add('hidden');
       document.getElementById('appUnlockInput').value = '';
+
+      const bioWrap = document.getElementById('appLockBioWrap');
+      const bioHint = document.getElementById('appLockBioHint');
+      const hasBioCred = Boolean(securityConfig.biometricEnabled && securityConfig.biometricCredId);
+      if (bioWrap) bioWrap.classList.toggle('hidden', !(hasBioCred && isWebAuthnContextReady()));
+      if (bioHint) bioHint.classList.toggle('hidden', !(hasBioCred && !isWebAuthnContextReady()));
+
       document.getElementById('appLockOverlay').classList.remove('hidden');
       updateSecurityIndicators();
       logAudit('SECURITY', 'စနစ်အား လော့ခ်ချပြီး', 'App Vault Lock activated', 'info');
       setTimeout(() => document.getElementById('appUnlockInput').focus(), 80);
+    }
+
+    async function unlockAppWithBiometric() {
+      const errEl = document.getElementById('appLockError');
+      errEl.classList.add('hidden');
+      try {
+        const ok = await verifyBiometricCredential();
+        if (ok) {
+          isAppLocked = false;
+          securityConfig.failedAttempts = 0;
+          securityConfig.lockoutUntil = 0;
+          saveSecurityConfig();
+          lastActivityAt = Date.now();
+          document.getElementById('appLockOverlay').classList.add('hidden');
+          logAudit('SECURITY', 'Biometric (Fingerprint/Face ID) ဖြင့် သော့ဖွင့်ဝင်ရောက်ပြီး', 'WebAuthn Verified', 'success');
+          showToast('👆 Biometric အတည်ပြုမှု အောင်မြင်ပါသည် — ကြိုဆိုပါသည်', 'success');
+        }
+      } catch (err) {
+        errEl.textContent = err && err.name === 'NotAllowedError'
+          ? 'Biometric စစ်ဆေးမှု ပယ်ဖျက်လိုက်ပါသည် — Passcode ဖြင့် ဝင်ရောက်နိုင်ပါသည်။'
+          : (err.message || 'Biometric စစ်ဆေးမှု မအောင်မြင်ပါ — Passcode ဖြင့် ဝင်ရောက်ပါ။');
+        errEl.classList.remove('hidden');
+      }
     }
 
     async function submitAppUnlock(e) {
@@ -3537,12 +4265,19 @@ function doPost(e) {
       document.getElementById('secModalLockNowBtn').classList.toggle('hidden', !p.hasAppLock);
       document.getElementById('secDataFingerprint').textContent = computeDatabaseFingerprint();
 
+      const engineNote = document.getElementById('secCryptoEngineNote');
+      if (engineNote) {
+        engineNote.textContent = hasWebCryptoNative()
+          ? '✅ Web Crypto API (crypto.subtle SHA-256 / PBKDF2) ဖြင့် တိုက်ရိုက်အလုပ်လုပ်နေသည်'
+          : '🟡 Local File Mode: Built-in FIPS SHA-256 / PBKDF2 Engine ဖြင့် အလိုအလျောက် Fallback အလုပ်လုပ်နေသည်';
+      }
+
       const checks = [
-        { ok: p.isHttps, label: 'HTTPS Secure Context', sub: p.isHttps ? 'HTTPS ချိတ်ဆက်ထားသည်' : 'Local/HTTP (Netlify HTTPS အကြံပြု)' },
-        { ok: true, label: 'SHA-256 / PBKDF2', sub: 'Salted Cryptographic Hashing' },
-        { ok: p.hasAppLock, label: 'App Access Lock', sub: p.hasAppLock ? 'Passcode ဖွင့်ထားသည်' : 'မသတ်မှတ်ရသေးပါ' },
-        { ok: p.hasEngLock, label: 'Engineering Passcode', sub: p.hasEngLock ? 'ပြင်/ဖျက် ကာကွယ်ထားသည်' : 'မသတ်မှတ်ရသေးပါ' },
-        { ok: p.hasAutoLock, label: 'Idle Auto-Lock', sub: p.hasAutoLock ? `${toMM(securityConfig.autoLockMin)} မိနစ်အကြာ လော့ခ်ချ` : 'ပိတ်ထားသည်' },
+        { ok: p.isHttps, label: 'HTTPS Secure Context', sub: p.isHttps ? 'HTTPS ချိတ်ဆက်ထားသည်' : 'Local/HTTP (GitHub/Netlify HTTPS အကြံပြု)' },
+        { ok: true, label: 'Web Crypto SHA-256', sub: hasWebCryptoNative() ? 'Native crypto.subtle Active' : 'Offline PBKDF2-SHA256 Fallback' },
+        { ok: p.hasAppLock, label: 'Database Access Lock', sub: p.hasAppLock ? 'SHA-256 Passcode ဖွင့်ထားသည်' : 'မသတ်မှတ်ရသေးပါ' },
+        { ok: p.hasBiometric, label: 'Biometric (WebAuthn)', sub: p.hasBiometric ? 'Fingerprint / Face ID ချိတ်ပြီး' : (isWebAuthnContextReady() ? 'ချိတ်ဆက်ရန် အသင့်ရှိသည်' : 'HTTPS တွင်သာ သုံးနိုင်သည်') },
+        { ok: p.hasEngLock, label: 'Admin Passcode', sub: p.hasEngLock ? 'Engineering / Settings ကာကွယ်ပြီး' : 'မသတ်မှတ်ရသေးပါ' },
         { ok: p.hasApiSecret, label: 'Cloud API Secret', sub: p.hasApiSecret ? 'SHA-256 Token ချိတ်ပြီး' : 'AD_Db_Sync Secret မထည့်ရသေး' }
       ];
       document.getElementById('secChecklistGrid').innerHTML = checks.map(c => `
@@ -3560,6 +4295,36 @@ function doPost(e) {
       appPill.className = `px-2.5 py-1 rounded-full text-[11px] font-bold ${p.hasAppLock ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}`;
       document.getElementById('disableAppLockBtn').classList.toggle('hidden', !p.hasAppLock);
       document.getElementById('secAutoLockSelect').value = String(securityConfig.autoLockMin || 0);
+
+      const dbGateChk = document.getElementById('dbAccessLockChk');
+      if (dbGateChk) dbGateChk.checked = Boolean(securityConfig.dbAccessLockEnabled);
+
+      const bioPill = document.getElementById('biometricStatusPill');
+      const bioDesc = document.getElementById('biometricStatusDesc');
+      const regBioBtn = document.getElementById('registerBiometricBtn');
+      const testBioBtn = document.getElementById('testBiometricBtn');
+      const disBioBtn = document.getElementById('disableBiometricBtn');
+
+      if (bioPill && bioDesc) {
+        if (p.hasBiometric) {
+          bioPill.textContent = '👆 ချိတ်ဆက်ပြီး';
+          bioPill.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-sky-100 text-sky-800 shrink-0';
+          bioDesc.textContent = isWebAuthnContextReady()
+            ? `Fingerprint / Face ID ချိတ်ဆက်ထားပြီး (${formatDateTimeMM(securityConfig.biometricRegisteredAt)}) — App နှင့် Database ဖွင့်ရာတွင် သုံးနိုင်သည်`
+            : 'Biometric ချိတ်ထားသော်လည်း လက်ရှိ Local file ဖြစ်သဖြင့် Passcode ဖြင့် အလိုအလျောက် Fallback အလုပ်လုပ်ပါမည်';
+        } else if (isWebAuthnContextReady()) {
+          bioPill.textContent = webAuthnPlatformAvailable ? 'အသင့်ရှိသည်' : 'စစ်ဆေးရန်';
+          bioPill.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 shrink-0';
+          bioDesc.textContent = 'HTTPS စနစ်ဖြစ်သဖြင့် ဤစက်၏ Fingerprint / Face ID / Windows Hello ကို ချိတ်ဆက်အသုံးပြုနိုင်ပါသည်';
+        } else {
+          bioPill.textContent = 'HTTPS လိုအပ်';
+          bioPill.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 shrink-0';
+          bioDesc.textContent = 'Local file (file:///) တွင် Browser လုံခြုံရေးအရ WebAuthn မရပါ — GitHub Pages / Netlify (HTTPS) ပေါ်တင်သုံးပါက အလိုအလျောက်ရပြီး လောလောဆယ် SHA-256 Passcode ဖြင့် အပြည့်အဝကာကွယ်ထားသည်';
+        }
+      }
+      if (regBioBtn) regBioBtn.textContent = p.hasBiometric ? '🔄 Biometric အသစ်ပြန်ချိတ်မည်' : '👆 Fingerprint / Face ID ချိတ်ဆက်မည်';
+      if (testBioBtn) testBioBtn.classList.toggle('hidden', !(p.hasBiometric && isWebAuthnContextReady()));
+      if (disBioBtn) disBioBtn.classList.toggle('hidden', !p.hasBiometric);
 
       const engPill = document.getElementById('engLockStatusPill');
       engPill.textContent = p.hasEngLock ? '🛠️ ကာကွယ်ထားသည်' : 'ပိတ်ထားသည်';
@@ -3620,6 +4385,11 @@ function doPost(e) {
         securityConfig.appPassSalt = '';
         securityConfig.recoveryHash = '';
         securityConfig.recoverySalt = '';
+        securityConfig.dbAccessLockEnabled = false;
+        securityConfig.biometricEnabled = false;
+        securityConfig.biometricCredId = '';
+        securityConfig.biometricRegisteredAt = 0;
+        dbUnlockedUntil = 0;
         saveSecurityConfig();
         document.getElementById('recoveryKeyBox').classList.add('hidden');
         logAudit('SECURITY', 'App Access Lock ဖြုတ်လိုက်ပြီး', 'Screen lock disabled', 'warn');
@@ -3699,11 +4469,21 @@ function doPost(e) {
     }
 
     function updateAutoLockMinutes(val) {
-      securityConfig.autoLockMin = Number(val) || 0;
-      saveSecurityConfig();
-      updateSecurityIndicators();
-      renderSecurityModal();
-      showToast(securityConfig.autoLockMin > 0 ? `⏱️ ${toMM(securityConfig.autoLockMin)} မိနစ်အကြာ အလိုအလျောက်လော့ခ်ချမည်` : 'အလိုအလျောက်လော့ခ်ချခြင်း ပိတ်ထားပါသည်', 'info');
+      const prevVal = securityConfig.autoLockMin || 0;
+      const nextVal = Number(val) || 0;
+      const applyVal = () => {
+        securityConfig.autoLockMin = nextVal;
+        saveSecurityConfig();
+        updateSecurityIndicators();
+        renderSecurityModal();
+        showToast(securityConfig.autoLockMin > 0 ? `⏱️ ${toMM(securityConfig.autoLockMin)} မိနစ်အကြာ အလိုအလျောက်လော့ခ်ချမည်` : 'အလိုအလျောက်လော့ခ်ချခြင်း ပိတ်ထားပါသည်', 'info');
+      };
+      if (securityConfig.engLockEnabled && securityConfig.engPassHash && Date.now() >= engUnlockedUntil) {
+        document.getElementById('secAutoLockSelect').value = String(prevVal);
+        openEngGateModal('eng', 'Auto-Lock အချိန်ပြောင်းလဲခြင်း', applyVal);
+        return;
+      }
+      applyVal();
     }
 
     function copyRecoveryKey() {
@@ -3736,6 +4516,9 @@ function doPost(e) {
           a.click();
           a.remove();
           URL.revokeObjectURL(url);
+          syncMeta.lastBackupAt = Date.now();
+          saveLocalMeta();
+          refreshDataManagementUI();
           logAudit('SECURITY', 'ကုဒ်ဝှက် Backup ထုတ်ယူပြီး', `SHA256-CTR-HMAC (${env.checksum.slice(0, 12)}...)`, 'success');
           showToast('🔐 ကုဒ်ဝှက် Backup (.popaenc) ဒေါင်းလုဒ်ဆွဲပြီးပါပြီ', 'success');
         } catch (_) {
@@ -4005,27 +4788,343 @@ function doPost(e) {
       document.body.classList.toggle('density-compact', uiState.density === 'compact');
     }
 
-    function openSysSettingsModal() {
+    /** Office Profile Renderer (Updates Header, Title, Footer & Print Signatory Block) */
+    function getOfficeProfile() {
+      return { ...DEFAULT_OFFICE_PROFILE, ...(syncData.officeProfile || {}) };
+    }
+
+    function applyOfficeProfile() {
+      const op = getOfficeProfile();
+      const titleText = op.siteTitle || DEFAULT_OFFICE_PROFILE.siteTitle;
+      const officeText = op.officeName || DEFAULT_OFFICE_PROFILE.officeName;
+      document.title = titleText;
+
+      const h1 = document.getElementById('mainSiteTitle');
+      if (h1) h1.textContent = titleText;
+
+      const hdrOff = document.getElementById('hdrOfficeName');
+      if (hdrOff) hdrOff.textContent = `🏛️ ${officeText}`;
+
+      const ftr = document.getElementById('mainFooterText');
+      if (ftr) {
+        ftr.textContent = `${titleText} (${officeText}) • နေ့စဉ်လုပ်ငန်းစောင့်ကြည့်ကြီးကြပ်မှုနှင့် ဒေတာဘေ့စ်ဗဟိုစနစ် (AD-Database)`;
+      }
+
+      const pOff = document.getElementById('printFooterOffice');
+      if (pOff) pOff.textContent = `${titleText} • ${officeText}`;
+      const pName = document.getElementById('printSignatoryName');
+      if (pName) pName.textContent = op.officerName ? `(${op.officerName})` : '';
+      const pTitle = document.getElementById('printSignatoryTitle');
+      if (pTitle) pTitle.textContent = op.officerTitle || DEFAULT_OFFICE_PROFILE.officerTitle;
+      const pGen = document.getElementById('printGeneratedAt');
+      if (pGen) pGen.textContent = `ထုတ်ယူသည့်အချိန် - ${formatDateTimeMM(Date.now())}`;
+
+      updateBackupReminderBadge();
+    }
+
+    function updateBackupReminderBadge() {
+      const badge = document.getElementById('menuBackupStatusBadge');
+      if (!badge) return;
+      const remindDays = Number(getOfficeProfile().backupRemindDays ?? 7);
+      if (remindDays <= 0) {
+        badge.classList.add('hidden');
+        return;
+      }
+      const elapsedDays = syncMeta.lastBackupAt
+        ? Math.floor((Date.now() - syncMeta.lastBackupAt) / 86400000)
+        : 999;
+      if (elapsedDays >= remindDays) {
+        badge.textContent = syncMeta.lastBackupAt ? `${toMM(elapsedDays)} ရက်ကျော်` : 'Backup လို';
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function switchSysSettingsTab(tab) {
+      const target = ['office', 'data', 'prefs'].includes(tab) ? tab : 'office';
+      uiState.activeSysTab = target;
+      ['office', 'data', 'prefs'].forEach(t => {
+        const panel = document.getElementById(`sysTab-${t}`);
+        const btn = document.getElementById(`sysTabBtn-${t}`);
+        if (panel) panel.classList.toggle('hidden', t !== target);
+        if (btn) {
+          btn.className = t === target
+            ? 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer bg-emerald-800 text-white shadow-sm'
+            : 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer bg-white border border-slate-200 text-slate-700 hover:bg-emerald-50';
+        }
+      });
+      if (target === 'data') refreshDataManagementUI();
+    }
+
+    function openSysSettingsModal(tab) {
       const dd = document.getElementById('toolsDropdown');
       if (dd) dd.classList.add('hidden');
-      document.getElementById('prefFontScale').value = uiState.fontScale;
-      document.getElementById('prefDensity').value = uiState.density;
-      document.getElementById('prefSyncInterval').value = String(uiState.syncIntervalSec);
-      document.getElementById('prefDefaultView').value = uiState.defaultView;
+
+      // Populate Office Settings fields
+      const op = getOfficeProfile();
+      const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+      setVal('officeSiteTitleInput', op.siteTitle);
+      setVal('officeNameInput', op.officeName);
+      setVal('officeOfficerNameInput', op.officerName);
+      setVal('officeOfficerTitleInput', op.officerTitle);
+      setVal('officeDefaultRecipInput', op.defaultRecipient);
+      setVal('officeRefPrefixInput', op.letterRefPrefix);
+      setVal('officeBackupRemindSelect', String(op.backupRemindDays ?? 7));
+
+      // Populate System Preferences fields
+      setVal('prefFontScale', uiState.fontScale);
+      setVal('prefDensity', uiState.density);
+      setVal('prefSyncInterval', String(uiState.syncIntervalSec));
+      setVal('prefDefaultView', uiState.defaultView);
+
+      // Reset inline factory reset confirmation box
+      toggleResetConfirmPanel(false);
+      refreshDataManagementUI();
+      switchSysSettingsTab(tab || uiState.activeSysTab || 'office');
       document.getElementById('sysSettingsModal').classList.remove('hidden');
     }
 
     function closeSysSettingsModal() {
       document.getElementById('sysSettingsModal').classList.add('hidden');
+      toggleResetConfirmPanel(false);
+    }
+
+    function saveOfficeProfileSettings() {
+      guardMutation('ရုံးဌာနဆက်တင် ပြင်ဆင်သိမ်းဆည်းခြင်း', () => {
+        const g = (id) => (document.getElementById(id) ? document.getElementById(id).value.trim() : '');
+        syncData.officeProfile = {
+          siteTitle: g('officeSiteTitleInput') || DEFAULT_OFFICE_PROFILE.siteTitle,
+          officeName: g('officeNameInput') || DEFAULT_OFFICE_PROFILE.officeName,
+          officerName: g('officeOfficerNameInput'),
+          officerTitle: g('officeOfficerTitleInput') || DEFAULT_OFFICE_PROFILE.officerTitle,
+          defaultRecipient: g('officeDefaultRecipInput') || DEFAULT_OFFICE_PROFILE.defaultRecipient,
+          letterRefPrefix: g('officeRefPrefixInput'),
+          backupRemindDays: Number(document.getElementById('officeBackupRemindSelect')?.value ?? 7),
+          updatedAt: Date.now()
+        };
+        applyOfficeProfile();
+        renderControls();
+        scheduleCloudPush();
+        logAudit('SYSTEM', 'ရုံးဌာနဆက်တင် ပြင်ဆင်သိမ်းဆည်း', `${syncData.officeProfile.siteTitle} • ${syncData.officeProfile.officeName}`, 'success');
+        showToast('🏛️ ရုံးဌာနဆက်တင်များ သိမ်းဆည်းပြီးပါပြီ', 'success');
+      }, true);
+    }
+
+    function resetOfficeProfileDefault() {
+      guardMutation('ရုံးဌာနဆက်တင် မူလအတိုင်းပြန်ထားခြင်း', () => {
+        syncData.officeProfile = { ...DEFAULT_OFFICE_PROFILE, updatedAt: Date.now() };
+        applyOfficeProfile();
+        renderControls();
+        openSysSettingsModal('office');
+        scheduleCloudPush();
+        logAudit('SYSTEM', 'ရုံးဌာနဆက်တင် မူလအတိုင်းပြန်ထား', '', 'info');
+        showToast('↺ မူလရုံးဌာနဆက်တင်အတိုင်း ပြန်လည်သတ်မှတ်ပြီးပါပြီ', 'info');
+      }, true);
+    }
+
+    /** Data Management Diagnostics, Snapshot & Factory Reset */
+    function calcLocalStorageBytes() {
+      let total = 0;
+      try {
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          const v = localStorage.getItem(k) || '';
+          total += (k.length + v.length) * 2;
+        }
+      } catch (_) {}
+      return total;
+    }
+
+    function savePreRestoreSnapshot(reasonLabel) {
+      try {
+        const snap = {
+          reason: reasonLabel || 'Pre-Restore',
+          savedAt: Date.now(),
+          data: JSON.parse(JSON.stringify(syncData))
+        };
+        localStorage.setItem(STORAGE_SNAPSHOT_KEY, JSON.stringify(snap));
+      } catch (_) {}
+    }
+
+    function hasPreRestoreSnapshot() {
+      try { return Boolean(localStorage.getItem(STORAGE_SNAPSHOT_KEY)); } catch (_) { return false; }
+    }
+
+    function restorePreSafetySnapshot() {
+      guardMutation('Safety Snapshot ပြန်ယူခြင်း', () => {
+        try {
+          const rawSnap = localStorage.getItem(STORAGE_SNAPSHOT_KEY);
+          if (!rawSnap) {
+            showToast('သိမ်းဆည်းထားသော Safety Snapshot မတွေ့ပါ', 'error');
+            return;
+          }
+          const parsed = JSON.parse(rawSnap);
+          if (!parsed || !parsed.data) throw new Error('Invalid snapshot');
+          applyFullReplaceData(parsed.data);
+          saveLocalData();
+          applyOfficeProfile();
+          renderAll();
+          scheduleCloudPush();
+          refreshDataManagementUI();
+          logAudit('SYSTEM', 'Safety Snapshot ပြန်ယူပြီး', formatDateTimeMM(parsed.savedAt), 'success');
+          showToast(`↺ Safety Snapshot (${formatDateTimeMM(parsed.savedAt)}) ကို အောင်မြင်စွာ ပြန်ယူပြီးပါပြီ`, 'success');
+        } catch (_) {
+          showToast('Snapshot ပြန်ယူရာတွင် အမှားအယွင်းဖြစ်ပွားပါသည်', 'error');
+        }
+      }, true);
+    }
+
+    function refreshDataManagementUI() {
+      const grid = document.getElementById('dmStatsGrid');
+      const pill = document.getElementById('dmLastBackupPill');
+      const stTxt = document.getElementById('dmStorageText');
+      const stBar = document.getElementById('dmStorageBar');
+      const undoBtn = document.getElementById('dmUndoSnapshotBtn');
+
+      if (grid) {
+        const doneCnt = Object.values(syncData.taskStates).filter(s => s && s.done).length;
+        const noteCnt = Object.values(syncData.taskStates).filter(s => s && (s.letterNo || s.note)).length;
+        const customCnt = syncData.customTasks.filter(c => c && !c.deleted).length;
+        const trashCnt = getDeletedTaskItems().length;
+        const stats = [
+          { label: 'လုပ်ငန်းစုစုပေါင်း', val: allTasksCache.length, cls: 'text-slate-900' },
+          { label: 'ပြီးစီးမှတ်တမ်း', val: doneCnt, cls: 'text-emerald-700' },
+          { label: 'စာအမှတ်/မှတ်ချက်', val: noteCnt, cls: 'text-amber-700' },
+          { label: 'ထပ်တိုးလုပ်ငန်း', val: customCnt, cls: 'text-teal-700' },
+          { label: 'ဖျက်ထားသည်', val: trashCnt, cls: 'text-rose-700' },
+          { label: 'Audit မှတ်တမ်း', val: auditLogs.length, cls: 'text-purple-700' }
+        ];
+        grid.innerHTML = stats.map(s => `
+          <div class="p-2 rounded-xl bg-white/90 border border-slate-200">
+            <div class="text-base sm:text-lg font-bold ${s.cls}">${toMM(s.val)}</div>
+            <div class="text-[10px] text-slate-500 font-semibold">${s.label}</div>
+          </div>
+        `).join('');
+      }
+
+      if (pill) {
+        if (syncMeta.lastBackupAt) {
+          const days = Math.floor((Date.now() - syncMeta.lastBackupAt) / 86400000);
+          const remindDays = Number(getOfficeProfile().backupRemindDays ?? 7);
+          const overdue = remindDays > 0 && days >= remindDays;
+          pill.textContent = `နောက်ဆုံး Backup: ${formatDateTimeMM(syncMeta.lastBackupAt)}`;
+          pill.className = `px-2.5 py-1 rounded-full text-[11px] font-bold ${overdue ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-800'}`;
+        } else {
+          pill.textContent = '⚠️ Backup မပြုလုပ်ရသေးပါ';
+          pill.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900';
+        }
+      }
+
+      if (stTxt && stBar) {
+        const bytes = calcLocalStorageBytes();
+        const kb = Math.max(1, Math.round(bytes / 1024));
+        const pct = Math.min(100, Math.max(1, Math.round((kb / 5120) * 100)));
+        stTxt.textContent = `${toMM(kb)} KB / ၅,၁၂၀ KB (${toMM(pct)}%)`;
+        stBar.style.width = `${pct}%`;
+        stBar.className = `h-full rounded-full transition-all ${pct > 80 ? 'bg-rose-600' : pct > 55 ? 'bg-amber-500' : 'bg-emerald-600'}`;
+      }
+
+      if (undoBtn) {
+        undoBtn.classList.toggle('hidden', !hasPreRestoreSnapshot());
+      }
+      updateBackupReminderBadge();
+    }
+
+    function setRestoreMode(mode) {
+      uiState.restoreMode = mode === 'replace' ? 'replace' : 'merge';
+    }
+
+    function applyFullReplaceData(payload) {
+      syncData.taskStates = payload.taskStates && typeof payload.taskStates === 'object' ? { ...payload.taskStates } : {};
+      syncData.taskOverrides = payload.taskOverrides && typeof payload.taskOverrides === 'object' ? { ...payload.taskOverrides } : {};
+      syncData.deletedTasks = payload.deletedTasks && typeof payload.deletedTasks === 'object' ? { ...payload.deletedTasks } : {};
+      syncData.customTasks = Array.isArray(payload.customTasks)
+        ? payload.customTasks.map(ct => ({ ...ct, dept: normalizeDept(ct.dept) }))
+        : [];
+      syncData.settings = payload.settings && typeof payload.settings === 'object'
+        ? { shiftWeekends: typeof payload.settings.shiftWeekends === 'boolean' ? payload.settings.shiftWeekends : true, updatedAt: Date.now() }
+        : { shiftWeekends: true, updatedAt: Date.now() };
+      syncData.dbConfigs = payload.dbConfigs && typeof payload.dbConfigs === 'object'
+        ? { items: { ...(payload.dbConfigs.items || {}) }, updatedAt: Date.now() }
+        : { items: {}, updatedAt: Date.now() };
+      syncData.officeProfile = payload.officeProfile && typeof payload.officeProfile === 'object'
+        ? { ...DEFAULT_OFFICE_PROFILE, ...payload.officeProfile, updatedAt: Date.now() }
+        : { ...DEFAULT_OFFICE_PROFILE, updatedAt: Date.now() };
+    }
+
+    function toggleResetConfirmPanel(forceShow) {
+      const box = document.getElementById('dmResetConfirmBox');
+      const inp = document.getElementById('dmResetConfirmInput');
+      if (!box) return;
+      const show = typeof forceShow === 'boolean' ? forceShow : box.classList.contains('hidden');
+      box.classList.toggle('hidden', !show);
+      if (inp) {
+        inp.value = '';
+        if (show) setTimeout(() => inp.focus(), 50);
+      }
+    }
+
+    function executeFactoryDataReset() {
+      const val = (document.getElementById('dmResetConfirmInput')?.value || '').trim().toUpperCase();
+      if (val !== 'RESET') {
+        showToast('အတည်ပြုရန် RESET ဟု တိကျစွာ ရိုက်ထည့်ပေးပါ', 'error');
+        return;
+      }
+      guardMutation('စက်တွင်းဒေတာအားလုံး မူလအတိုင်းရှင်းလင်းခြင်း (Factory Reset)', () => {
+        savePreRestoreSnapshot('Before Factory Reset');
+        const now = Date.now();
+        syncData.taskStates = {};
+        syncData.taskOverrides = {};
+        syncData.deletedTasks = {};
+        syncData.customTasks = [];
+        syncData.settings = { shiftWeekends: true, updatedAt: now };
+        saveLocalData();
+        toggleResetConfirmPanel(false);
+        renderAll();
+        refreshDataManagementUI();
+        scheduleCloudPush();
+        logAudit('SECURITY', 'Factory Data Reset ပြုလုပ်ပြီး', 'Pre-reset Safety Snapshot သိမ်းထားပြီး', 'warn');
+        showToastWithAction(
+          '🗑️ ဒေတာများကို မူလအတိုင်း ရှင်းလင်းပြီးပါပြီ (Snapshot သိမ်းထားသည်)',
+          '↺ ပြန်ယူရန်',
+          restorePreSafetySnapshot
+        );
+      }, true);
     }
 
     function updatePref(key, value) {
-      uiState[key] = value;
-      saveLocalUiPrefs();
-      applyDisplayPreferences();
-      if (key === 'syncIntervalSec') startCloudAutoPolling();
-      logAudit('SYSTEM', 'စနစ်ဆက်တင်ပြောင်းလဲ', `${key} = ${value}`, 'info');
-      showToast('🎛️ စနစ်ဆက်တင် သိမ်းဆည်းပြီးပါပြီ', 'success');
+      const prevVal = uiState[key];
+      const prefIdMap = {
+        fontScale: 'prefFontScale',
+        density: 'prefDensity',
+        syncIntervalSec: 'prefSyncInterval',
+        defaultView: 'prefDefaultView'
+      };
+      const applyPref = () => {
+        uiState[key] = value;
+        saveLocalUiPrefs();
+        applyDisplayPreferences();
+        if (key === 'syncIntervalSec') startCloudAutoPolling();
+        const el = document.getElementById(prefIdMap[key]);
+        if (el) el.value = String(value);
+        logAudit('SYSTEM', 'စနစ်ဆက်တင်ပြောင်းလဲ', `${key} = ${value}`, 'info');
+        showToast('🎛️ စနစ်ဆက်တင် သိမ်းဆည်းပြီးပါပြီ', 'success');
+      };
+
+      if (securityConfig.readOnlyMode) {
+        const el = document.getElementById(prefIdMap[key]);
+        if (el) el.value = String(prevVal);
+        showToast('👁️ Read-Only Mode ဖွင့်ထားသဖြင့် စနစ်ဆက်တင် ပြောင်းလဲ၍မရပါ', 'error');
+        return;
+      }
+      if (securityConfig.engLockEnabled && securityConfig.engPassHash && Date.now() >= engUnlockedUntil) {
+        const el = document.getElementById(prefIdMap[key]);
+        if (el) el.value = String(prevVal);
+        openEngGateModal('eng', 'System Settings (Preferences) ပြင်ဆင်ခြင်း', applyPref);
+        return;
+      }
+      applyPref();
     }
 
     /** Bulk Selection Actions */
@@ -4316,6 +5415,20 @@ function doPost(e) {
         }
       }
 
+      if (remote.officeProfile && typeof remote.officeProfile === 'object') {
+        const rTs = Number(remote.officeProfile.updatedAt) || 0;
+        const lTs = Number(syncData.officeProfile.updatedAt) || 0;
+        if (rTs > lTs) {
+          syncData.officeProfile = {
+            ...DEFAULT_OFFICE_PROFILE,
+            ...remote.officeProfile,
+            backupRemindDays: Number(remote.officeProfile.backupRemindDays ?? 7),
+            updatedAt: rTs
+          };
+          changed = true;
+        }
+      }
+
       if (changed) saveLocalData();
       return changed;
     }
@@ -4469,6 +5582,7 @@ function doPost(e) {
           customTasks: syncData.customTasks,
           settings: syncData.settings,
           dbConfigs: syncData.dbConfigs,
+          officeProfile: syncData.officeProfile,
           integritySha256: computeDatabaseFingerprint(),
           lastUpdatedAt: Date.now()
         };
@@ -4720,40 +5834,42 @@ function doPost(e) {
       const db = getEffectiveDatabases().find(d => d.id === dbId);
       if (!db) return;
 
-      const isQgis = db.appType === 'qgis';
-      const displayFile = extractFileNameFromPath(db.localPath, db.fileBadge);
+      guardDatabaseAccess(db.title, () => {
+        const isQgis = db.appType === 'qgis';
+        const displayFile = extractFileNameFromPath(db.localPath, db.fileBadge);
 
-      if (uiState.dbOpenMode === 'drive') {
-        window.open(db.driveUrl, '_blank', 'noopener,noreferrer');
-        showToast(`☁️ "${db.title}" ကို Google Drive တွင် ဖွင့်နေပါသည်`, 'info');
-        return;
-      }
+        if (uiState.dbOpenMode === 'drive') {
+          window.open(db.driveUrl, '_blank', 'noopener,noreferrer');
+          showToast(`☁️ "${db.title}" ကို Google Drive တွင် ဖွင့်နေပါသည်`, 'info');
+          return;
+        }
 
-      if (uiState.dbOpenMode === 'office' && !isQgis) {
-        const normalized = db.localPath.replace(/\\/g, '/');
-        const encodedSegments = normalized.split('/').map((seg, idx) =>
-          (idx === 0 && /^[a-zA-Z]:$/.test(seg)) ? seg : encodeURIComponent(seg)
-        ).join('/');
-        const officeUri = `ms-excel:ofe|u|file:///${encodedSegments}`;
-        triggerProtocolLaunch(officeUri);
+        if (uiState.dbOpenMode === 'office' && !isQgis) {
+          const normalized = db.localPath.replace(/\\/g, '/');
+          const encodedSegments = normalized.split('/').map((seg, idx) =>
+            (idx === 0 && /^[a-zA-Z]:$/.test(seg)) ? seg : encodeURIComponent(seg)
+          ).join('/');
+          const officeUri = `ms-excel:ofe|u|file:///${encodedSegments}`;
+          triggerProtocolLaunch(officeUri);
+          showToastWithAction(
+            `⚡ "${displayFile}" ကို Office URI ဖြင့် Excel တွင် ဖွင့်နေပါသည်`,
+            '⚙️ Setup / Path ပြင်ရန်',
+            openExcelSetupModal
+          );
+          return;
+        }
+
+        const encodedPath = utf8ToBase64Url(db.localPath);
+        const customUri = `popaexcel://open?p=${encodedPath}`;
+        triggerProtocolLaunch(customUri);
         showToastWithAction(
-          `⚡ "${displayFile}" ကို Office URI ဖြင့် Excel တွင် ဖွင့်နေပါသည်`,
-          '⚙️ Setup / Path ပြင်ရန်',
+          isQgis
+            ? `🗺️ "${displayFile}" ကို QGIS Software ဖြင့် ဖွင့်နေပါသည်...`
+            : `💻 "${displayFile}" ကို Microsoft Excel ဖြင့် ဖွင့်နေပါသည်...`,
+          isQgis ? '⚙️ QGIS Path ပြင် / Setup' : '⚙️ ပထမဆုံးအကြိမ်ဖြစ်ပါက Setup သွင်းရန်',
           openExcelSetupModal
         );
-        return;
-      }
-
-      const encodedPath = utf8ToBase64Url(db.localPath);
-      const customUri = `popaexcel://open?p=${encodedPath}`;
-      triggerProtocolLaunch(customUri);
-      showToastWithAction(
-        isQgis
-          ? `🗺️ "${displayFile}" ကို QGIS Software ဖြင့် ဖွင့်နေပါသည်...`
-          : `💻 "${displayFile}" ကို Microsoft Excel ဖြင့် ဖွင့်နေပါသည်...`,
-        isQgis ? '⚙️ QGIS Path ပြင် / Setup' : '⚙️ ပထမဆုံးအကြိမ်ဖြစ်ပါက Setup သွင်းရန်',
-        openExcelSetupModal
-      );
+      });
     }
 
     function triggerProtocolLaunch(uri) {
@@ -4768,8 +5884,10 @@ function doPost(e) {
     function openDatabaseDrive(dbId) {
       const db = getEffectiveDatabases().find(d => d.id === dbId);
       if (!db) return;
-      window.open(db.driveUrl, '_blank', 'noopener,noreferrer');
-      showToast(`☁️ "${db.title}" ကို Google Drive တွင် ဖွင့်လိုက်ပါပြီ`, 'info');
+      guardDatabaseAccess(`${db.title} (Google Drive)`, () => {
+        window.open(db.driveUrl, '_blank', 'noopener,noreferrer');
+        showToast(`☁️ "${db.title}" ကို Google Drive တွင် ဖွင့်လိုက်ပါပြီ`, 'info');
+      });
     }
 
     function copyDatabasePath(dbId) {
@@ -5134,18 +6252,51 @@ function doPost(e) {
     function filterTasks(list) {
       const q = uiState.searchQuery.trim().toLowerCase();
       const todayISO = getTodayISO();
-      return list.filter(t => {
+      const cat = uiState.categoryFilter || 'ALL';
+      const dFrom = uiState.dateFrom || '';
+      const dTo = uiState.dateTo || '';
+
+      const out = list.filter(t => {
         const st = getTaskState(t.id);
         if (uiState.deptFilter !== 'ALL' && t.dept !== uiState.deptFilter) return false;
         if (uiState.statusFilter === 'PENDING' && st.done) return false;
         if (uiState.statusFilter === 'DONE' && !st.done) return false;
         if (uiState.statusFilter === 'OVERDUE' && (st.done || t.date >= todayISO)) return false;
+        if (dFrom && t.date < dFrom) return false;
+        if (dTo && t.date > dTo) return false;
+
+        if (cat === 'HIGH' && t.priority !== 'high') return false;
+        else if (cat === 'WEEKLY' && !String(t.freq).includes('အပတ်စဉ်')) return false;
+        else if (cat === 'MONTHLY' && !String(t.freq).includes('လစဉ်')) return false;
+        else if (cat === 'PERIODIC' && !/(သုံးလပတ်|၆ လ|နှစ်စဉ်)/.test(String(t.freq))) return false;
+        else if (cat === 'CUSTOM' && !t.isCustom) return false;
+        else if (cat === 'WITH_NOTE' && !(st.letterNo || st.note)) return false;
+
         if (q) {
-          const hay = `${t.title} ${t.recipient} ${t.dept} ${t.freq} ${st.letterNo} ${st.note} ${formatMMShortDate(t.date)}`.toLowerCase();
+          const hay = `${t.title} ${t.recipient} ${t.dept} ${t.freq} ${st.letterNo} ${st.note} ${formatMMShortDate(t.date)} ${t.date}`.toLowerCase();
           if (!hay.includes(q)) return false;
         }
         return true;
       });
+
+      const sortMode = uiState.sortBy || 'DATE_ASC';
+      if (sortMode !== 'DATE_ASC') {
+        out.sort((a, b) => {
+          if (sortMode === 'DATE_DESC') {
+            if (a.date !== b.date) return b.date.localeCompare(a.date);
+          } else if (sortMode === 'PRIORITY') {
+            if (a.priority !== b.priority) return a.priority === 'high' ? -1 : 1;
+            if (a.date !== b.date) return a.date.localeCompare(b.date);
+          } else if (sortMode === 'DEPT') {
+            const da = DEPT_ORDER.indexOf(a.dept);
+            const db = DEPT_ORDER.indexOf(b.dept);
+            if (da !== db) return da - db;
+            if (a.date !== b.date) return a.date.localeCompare(b.date);
+          }
+          return a.id.localeCompare(b.id);
+        });
+      }
+      return out;
     }
 
     /***************************************************************************
@@ -5157,6 +6308,7 @@ function doPost(e) {
       renderKpisAndDeptProgress();
       renderControls();
       renderActiveView();
+      applyOfficeProfile();
       updateNotificationBadge();
       updateSecurityIndicators();
     }
@@ -5305,9 +6457,20 @@ function doPost(e) {
 
       document.getElementById('clearSearchBtn').classList.toggle('hidden', !uiState.searchQuery);
 
-      // Print Subtitle
+      // Advanced Filter Active Dot & Matched Count Summary
+      const hasAdvActive = Boolean(uiState.dateFrom || uiState.dateTo || uiState.categoryFilter !== 'ALL' || uiState.sortBy !== 'DATE_ASC');
+      const advDot = document.getElementById('advFilterActiveDot');
+      if (advDot) advDot.classList.toggle('hidden', !hasAdvActive);
+      const matchEl = document.getElementById('filterMatchSummary');
+      if (matchEl) {
+        const matched = filterTasks(scoped).length;
+        matchEl.textContent = `တွေ့ရှိမှု: ${toMM(matched)} / ${toMM(scoped.length)} ခု`;
+      }
+
+      // Print Subtitle (Uses Office Profile)
+      const op = getOfficeProfile();
       document.getElementById('printTitleLine').textContent =
-        `ပုပ္ပားတောင်ဥယျာဉ် - ဒေတာဘေ့စ်စနစ် (နေ့စဉ်လုပ်ငန်းစောင့်ကြည့်ကြီးကြပ်မှုဇယား) — ${formatMMMonth(uiState.selectedMonth)}` +
+        `${op.siteTitle} • ${op.officeName} (နေ့စဉ်လုပ်ငန်းစောင့်ကြည့်ကြီးကြပ်မှုဇယား) — ${formatMMMonth(uiState.selectedMonth)}` +
         (uiState.deptFilter !== 'ALL' ? ` (${uiState.deptFilter})` : '');
     }
 
@@ -5720,16 +6883,19 @@ function doPost(e) {
     }
 
     function toggleWeekendShift() {
-      syncData.settings.shiftWeekends = !syncData.settings.shiftWeekends;
-      syncData.settings.updatedAt = Date.now();
-      renderAll();
-      scheduleCloudPush();
-      showToast(
-        syncData.settings.shiftWeekends
-          ? 'ရုံးပိတ်ရက်များကို ရှေ့သောကြာနေ့သို့ အလိုအလျောက်ရွှေ့ထားပါသည်'
-          : 'မူလသတ်မှတ်ရက်စွဲအတိုင်း ပြသထားပါသည်',
-        'info'
-      );
+      guardMutation('ရုံးပိတ်ရက် ရွှေ့ပြောင်းမှုဆက်တင် ပြောင်းလဲခြင်း', () => {
+        syncData.settings.shiftWeekends = !syncData.settings.shiftWeekends;
+        syncData.settings.updatedAt = Date.now();
+        renderAll();
+        scheduleCloudPush();
+        logAudit('SYSTEM', 'ရုံးပိတ်ရက်ဆက်တင် ပြောင်းလဲ', syncData.settings.shiftWeekends ? 'ON' : 'OFF', 'info');
+        showToast(
+          syncData.settings.shiftWeekends
+            ? 'ရုံးပိတ်ရက်များကို ရှေ့သောကြာနေ့သို့ အလိုအလျောက်ရွှေ့ထားပါသည်'
+            : 'မူလသတ်မှတ်ရက်စွဲအတိုင်း ပြသထားပါသည်',
+          'info'
+        );
+      }, true);
     }
 
     function switchView(v) {
@@ -5829,11 +6995,41 @@ function doPost(e) {
       renderActiveView();
     }
 
+    function toggleAdvFilterBar() {
+      uiState.advFilterOpen = !uiState.advFilterOpen;
+      const bar = document.getElementById('advFilterBar');
+      const btn = document.getElementById('advFilterToggleBtn');
+      if (bar) bar.classList.toggle('hidden', !uiState.advFilterOpen);
+      if (btn) {
+        btn.className = uiState.advFilterOpen
+          ? 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-700 text-white border border-emerald-700 text-xs font-bold transition cursor-pointer'
+          : 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 border border-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer';
+      }
+      renderControls();
+    }
+
+    function onAdvFilterChange() {
+      uiState.dateFrom = document.getElementById('filterDateFrom')?.value || '';
+      uiState.dateTo = document.getElementById('filterDateTo')?.value || '';
+      uiState.categoryFilter = document.getElementById('filterCategorySelect')?.value || 'ALL';
+      uiState.sortBy = document.getElementById('filterSortSelect')?.value || 'DATE_ASC';
+      renderControls();
+      renderActiveView();
+    }
+
     function resetFilters() {
       uiState.deptFilter = 'ALL';
       uiState.statusFilter = 'ALL';
       uiState.searchQuery = '';
+      uiState.dateFrom = '';
+      uiState.dateTo = '';
+      uiState.categoryFilter = 'ALL';
+      uiState.sortBy = 'DATE_ASC';
       document.getElementById('searchInput').value = '';
+      const df = document.getElementById('filterDateFrom'); if (df) df.value = '';
+      const dt = document.getElementById('filterDateTo'); if (dt) dt.value = '';
+      const fc = document.getElementById('filterCategorySelect'); if (fc) fc.value = 'ALL';
+      const fs = document.getElementById('filterSortSelect'); if (fs) fs.value = 'DATE_ASC';
       renderKpisAndDeptProgress();
       renderControls();
       renderActiveView();
@@ -5943,7 +7139,8 @@ function doPost(e) {
       const st = getTaskState(taskId);
       document.getElementById('noteModalMeta').textContent = `${formatMMFullDate(task.date)} • ${task.dept}`;
       document.getElementById('noteModalTitle').textContent = task.title;
-      document.getElementById('noteLetterNoInput').value = st.letterNo || '';
+      const refPrefix = getOfficeProfile().letterRefPrefix || '';
+      document.getElementById('noteLetterNoInput').value = st.letterNo || refPrefix;
       document.getElementById('noteRemarkInput').value = st.note || '';
       document.getElementById('noteModal').classList.remove('hidden');
       setTimeout(() => document.getElementById('noteLetterNoInput').focus(), 70);
@@ -5999,7 +7196,7 @@ function doPost(e) {
       document.getElementById('customTaskDate').value = d;
       document.getElementById('customTaskDept').value = uiState.deptFilter !== 'ALL' ? uiState.deptFilter : 'လုပ်ငန်း';
       document.getElementById('customTaskTitle').value = '';
-      document.getElementById('customTaskRecipient').value = 'ညွှန်ကြားရေးမှူးရုံး၊ နေပြည်တော်';
+      document.getElementById('customTaskRecipient').value = getOfficeProfile().defaultRecipient || 'ညွှန်ကြားရေးမှူးရုံး၊ နေပြည်တော်';
       document.getElementById('addTaskModal').classList.remove('hidden');
       setTimeout(() => document.getElementById('customTaskTitle').focus(), 70);
     }
@@ -6397,6 +7594,9 @@ function doPost(e) {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
+      syncMeta.lastBackupAt = Date.now();
+      saveLocalMeta();
+      refreshDataManagementUI();
       logAudit('SYSTEM', 'JSON Backup ထုတ်ယူပြီး', `SHA-256: ${wrapped.integritySha256.slice(0, 14)}...`, 'success');
       showToast('JSON Backup ဖိုင် (SHA-256 Checksum ပါဝင်) ဒေါင်းလုဒ်ဆွဲပြီးပါပြီ', 'success');
     }
@@ -6426,17 +7626,39 @@ function doPost(e) {
           const payload = parsed.data ? parsed.data : parsed;
           if (!payload || typeof payload !== 'object') throw new Error('Invalid JSON');
 
-          if (payload.taskStates || payload.taskOverrides || payload.deletedTasks || payload.dbConfigs || payload.customTasks) {
-            mergeRemoteState(payload);
+          const hasValidKeys = Boolean(
+            payload.taskStates || payload.taskOverrides || payload.deletedTasks ||
+            payload.dbConfigs || payload.customTasks || payload.officeProfile
+          );
+          if (!hasValidKeys) throw new Error('Unrecognized JSON schema');
+
+          // Validate SHA-256 integrity checksum if present in Backup JSON
+          if (typeof parsed.integritySha256 === 'string' && parsed.integritySha256.length === 64) {
+            const expectedHash = computePayloadFingerprint(payload);
+            if (!safeEqualHex(expectedHash, parsed.integritySha256)) {
+              logAudit('SECURITY', 'Backup SHA-256 စစ်ဆေးမှု မအောင်မြင်', file.name, 'danger');
+              showToast('⚠️ Backup ဖိုင်၏ SHA-256 Integrity မကိုက်ညီပါ — ဖိုင်ပျက်စီး သို့မဟုတ် ပြင်ဆင်ခံထားရနိုင်သည်', 'error');
+              return;
+            }
+          }
+
+          // Save automatic pre-restore safety snapshot before changing any local data
+          savePreRestoreSnapshot(`Before Import (${file.name})`);
+
+          if (uiState.restoreMode === 'replace') {
+            applyFullReplaceData(payload);
           } else {
-            throw new Error('Unrecognized JSON');
+            mergeRemoteState(payload);
           }
 
           saveLocalData();
+          applyOfficeProfile();
           renderAll();
+          refreshDataManagementUI();
           scheduleCloudPush();
-          logAudit('SYSTEM', 'JSON Backup ပြန်သွင်းပြီး', file.name, 'success');
-          showToast('Backup ဒေတာများ အောင်မြင်စွာ ပေါင်းစပ်သွင်းပြီးပါပြီ', 'success');
+          const modeLabel = uiState.restoreMode === 'replace' ? 'အပြည့်အစုံအစားထိုး' : 'Smart Merge ပေါင်းစပ်';
+          logAudit('SYSTEM', `JSON Backup ပြန်သွင်းပြီး (${modeLabel})`, file.name, 'success');
+          showToast(`✓ Backup ဒေတာများ (${modeLabel}) အောင်မြင်စွာ သွင်းပြီးပါပြီ`, 'success');
         } catch (_) {
           showToast('Backup ဖိုင်ပုံစံ မမှန်ကန်ပါ (.JSON သို့ .popaenc ဖိုင်မှန်ရွေးပါ)', 'error');
         }
@@ -6444,9 +7666,9 @@ function doPost(e) {
       reader.readAsText(file, 'utf-8');
     }
 
-    function exportCSV() {
+    function exportCSV(exportAll = false) {
       document.getElementById('toolsDropdown').classList.add('hidden');
-      const rows = filterTasks(getScopedTasks());
+      const rows = exportAll ? allTasksCache : filterTasks(getScopedTasks());
       const headers = ['ရက်စွဲ', 'နေ့', 'ဌာနစိတ်', 'ဆောင်ရွက်ရမည့်လုပ်ငန်း', 'ပေးပို့ရမည့်ဌာန', 'အကြိမ်ရေ', 'အခြေအနေ', 'ပြီးစီးချိန်', 'စာအမှတ်', 'မှတ်ချက်'];
       const escCSV = (v) => `"${String(v || '').replace(/"/g, '""')}"`;
 
@@ -6467,7 +7689,7 @@ function doPost(e) {
         ].map(escCSV).join(','));
       }
 
-      const fileSuffix = uiState.selectedMonth === 'ALL'
+      const fileSuffix = (exportAll || uiState.selectedMonth === 'ALL')
         ? 'all_53months_2026_2031'
         : uiState.selectedMonth.replace(':', '_');
       const blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
@@ -6484,6 +7706,7 @@ function doPost(e) {
 
     function handlePrint() {
       document.getElementById('toolsDropdown').classList.add('hidden');
+      applyOfficeProfile();
       if (uiState.activeView === 'calendar') {
         uiState.activeView = 'table';
         renderControls();
@@ -6658,6 +7881,9 @@ function doPost(e) {
         engUnlockedUntil = 0;
         updateSecurityIndicators();
       }
+      if (dbUnlockedUntil > 0 && Date.now() >= dbUnlockedUntil) {
+        dbUnlockedUntil = 0;
+      }
     }
 
     ['mousemove', 'keydown', 'click', 'touchstart'].forEach(evt => {
@@ -6707,6 +7933,9 @@ function doPost(e) {
       renderAll();
       initLiveClocks();
       startCloudAutoPolling();
+      detectWebAuthnSupport().then(() => {
+        updateSecurityIndicators();
+      });
       if (securityConfig.appLockEnabled && securityConfig.appPassHash) {
         lockAppNow();
       }
