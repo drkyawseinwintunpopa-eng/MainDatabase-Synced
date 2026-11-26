@@ -181,6 +181,30 @@
     }
     .toast-anim { animation: toastRise 0.22s ease-out forwards; }
 
+    /* Calendar Touch & Mouse Swipe Gestures */
+    #calendarSwipeArea {
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
+      cursor: grab;
+    }
+    #calendarSwipeArea.is-dragging {
+      cursor: grabbing;
+    }
+    #calendarGrid {
+      will-change: transform, opacity;
+    }
+    @keyframes calSlideFromRight {
+      from { opacity: 0.35; transform: translateX(34px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes calSlideFromLeft {
+      from { opacity: 0.35; transform: translateX(-34px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .cal-slide-next { animation: calSlideFromRight 0.24s cubic-bezier(0.22, 1, 0.36, 1); }
+    .cal-slide-prev { animation: calSlideFromLeft 0.24s cubic-bezier(0.22, 1, 0.36, 1); }
+
     /* Sticky Date Banner in Daily Agenda */
     .sticky-day-bar {
       position: sticky;
@@ -1250,16 +1274,28 @@
     <!-- VIEW 2: INTERACTIVE MONTHLY CALENDAR GRID VIEW (ပြက္ခဒိန်)             -->
     <!-- ===================================================================== -->
     <section id="view-calendar" class="hidden space-y-4">
-      <div class="bg-white rounded-2xl shadow-sm border border-emerald-900/10 p-3 sm:p-5">
+      <div id="calendarSwipeArea" class="relative overflow-hidden bg-white rounded-2xl shadow-sm border border-emerald-900/10 p-3 sm:p-5">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-          <h3 id="calendarHeading" class="text-base sm:text-lg font-bold text-emerald-950"></h3>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="stepCalendarMonth(-1)" title="ယခင်လ" aria-label="ယခင်လ"
+              class="w-8 h-8 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 font-bold text-sm flex items-center justify-center transition cursor-pointer no-print">‹</button>
+            <h3 id="calendarHeading" class="text-base sm:text-lg font-bold text-emerald-950"></h3>
+            <button type="button" onclick="stepCalendarMonth(1)" title="နောက်လ" aria-label="နောက်လ"
+              class="w-8 h-8 rounded-xl border border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 font-bold text-sm flex items-center justify-center transition cursor-pointer no-print">›</button>
+          </div>
           <div class="flex flex-wrap items-center gap-2.5 text-[11px] sm:text-xs text-slate-600">
             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>ငွေစာရင်း</span>
             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>စီမံ</span>
             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>လုပ်ငန်း</span>
             <span class="inline-flex items-center gap-1 text-emerald-700 font-bold">✓ အားလုံးပြီး</span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/80 text-[10px] font-semibold no-print">
+              👆 ဘယ်/ညာ ပွတ်ဆွဲ၍ လပြောင်းနိုင်သည်
+            </span>
           </div>
         </div>
+
+        <!-- Floating Swipe Direction Feedback Pill -->
+        <div id="calendarSwipeBadge" class="hidden pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 px-4 py-2 rounded-full bg-emerald-900/90 text-white text-xs sm:text-sm font-bold shadow-xl border border-amber-300/50 backdrop-blur-sm"></div>
 
         <div class="grid grid-cols-7 gap-1 sm:gap-2 text-center mb-1.5">
           <div class="py-1.5 rounded-lg bg-rose-50 text-rose-700 font-bold text-[11px] sm:text-xs">တနင်္ဂနွေ</div>
@@ -6934,11 +6970,203 @@ function doPost(e) {
       renderActiveView();
     }
 
+    let calendarSwipeDirection = 0;
+    let suppressCalendarClickUntil = 0;
+
+    function getCurrentCalendarMonthKey() {
+      if (MONTH_KEYS.includes(uiState.selectedMonth)) return uiState.selectedMonth;
+      if (uiState.selectedMonth && uiState.selectedMonth.startsWith('FY:')) {
+        return getFiscalYearRange(uiState.selectedMonth.slice(3)).startISO.slice(0, 7);
+      }
+      const fallback = uiState.selectedCalendarDay ? uiState.selectedCalendarDay.slice(0, 7) : '2026-11';
+      return MONTH_KEYS.includes(fallback) ? fallback : '2026-11';
+    }
+
     function stepMonth(delta) {
       if (!MONTH_KEYS.includes(uiState.selectedMonth)) return;
       const idx = MONTH_KEYS.indexOf(uiState.selectedMonth);
       const next = idx + delta;
       if (next >= 0 && next < MONTH_KEYS.length) onMonthChange(MONTH_KEYS[next]);
+    }
+
+    function stepCalendarMonth(delta) {
+      const currentMk = getCurrentCalendarMonthKey();
+      const idx = MONTH_KEYS.indexOf(currentMk);
+      const next = idx + delta;
+      if (next < 0) {
+        showToast(`ကာလအစ (${formatMMMonth(MONTH_KEYS[0])}) သို့ ရောက်ရှိနေပါသည်`, 'info');
+        return false;
+      }
+      if (next >= MONTH_KEYS.length) {
+        showToast(`ကာလအဆုံး (${formatMMMonth(MONTH_KEYS[MONTH_KEYS.length - 1])}) သို့ ရောက်ရှိနေပါသည်`, 'info');
+        return false;
+      }
+      calendarSwipeDirection = delta > 0 ? 1 : -1;
+      onMonthChange(MONTH_KEYS[next]);
+      const grid = document.getElementById('calendarGrid');
+      if (grid) {
+        grid.classList.remove('cal-slide-next', 'cal-slide-prev');
+        void grid.offsetWidth;
+        grid.classList.add(delta > 0 ? 'cal-slide-next' : 'cal-slide-prev');
+      }
+      return true;
+    }
+
+    /** Initialize Touch & Mouse Drag-to-Swipe Navigation on Calendar */
+    function initCalendarSwipe() {
+      const area = document.getElementById('calendarSwipeArea');
+      if (!area || area.dataset.swipeBound === '1') return;
+      area.dataset.swipeBound = '1';
+
+      let tracking = false;
+      let pointerId = null;
+      let startX = 0;
+      let startY = 0;
+      let startTime = 0;
+      let lastDx = 0;
+      let isHorizontal = false;
+      let lockedAxis = false;
+
+      const getGrid = () => document.getElementById('calendarGrid');
+      const getBadge = () => document.getElementById('calendarSwipeBadge');
+
+      const resetVisual = (animateBack = true) => {
+        const grid = getGrid();
+        const badge = getBadge();
+        area.classList.remove('is-dragging');
+        if (grid) {
+          grid.style.transition = animateBack ? 'transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease' : '';
+          grid.style.transform = '';
+          grid.style.opacity = '';
+          if (animateBack) {
+            setTimeout(() => { if (grid) grid.style.transition = ''; }, 210);
+          }
+        }
+        if (badge) badge.classList.add('hidden');
+      };
+
+      const startDrag = (clientX, clientY, pid = null) => {
+        if (uiState.activeView !== 'calendar' || isAppLocked) return;
+        tracking = true;
+        pointerId = pid;
+        startX = clientX;
+        startY = clientY;
+        startTime = Date.now();
+        lastDx = 0;
+        isHorizontal = false;
+        lockedAxis = false;
+      };
+
+      const moveDrag = (clientX, clientY, evt) => {
+        if (!tracking) return;
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+
+        if (!lockedAxis) {
+          if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+          lockedAxis = true;
+          isHorizontal = Math.abs(dx) > Math.abs(dy) * 1.15;
+          if (!isHorizontal) {
+            tracking = false;
+            return;
+          }
+          area.classList.add('is-dragging');
+        }
+
+        if (!isHorizontal) return;
+        if (evt && evt.cancelable) evt.preventDefault();
+        lastDx = dx;
+
+        const currentMk = getCurrentCalendarMonthKey();
+        const idx = MONTH_KEYS.indexOf(currentMk);
+        const wantNext = dx < 0;
+        const targetIdx = wantNext ? idx + 1 : idx - 1;
+        const atBoundary = targetIdx < 0 || targetIdx >= MONTH_KEYS.length;
+
+        const maxShift = atBoundary ? 24 : 78;
+        const damp = atBoundary ? 0.22 : 0.62;
+        const visualDx = Math.max(-maxShift, Math.min(maxShift, dx * damp));
+
+        const grid = getGrid();
+        if (grid) {
+          grid.style.transition = 'none';
+          grid.style.transform = `translateX(${visualDx}px)`;
+          grid.style.opacity = String(Math.max(0.68, 1 - Math.abs(visualDx) / 260));
+        }
+
+        const badge = getBadge();
+        if (badge && Math.abs(dx) >= 22) {
+          badge.classList.remove('hidden');
+          if (atBoundary) {
+            badge.textContent = wantNext ? 'ကာလအဆုံးသို့ ရောက်ပြီ' : 'ကာလအစသို့ ရောက်ပြီ';
+          } else {
+            const targetLabel = formatMMMonth(MONTH_KEYS[targetIdx]);
+            badge.textContent = wantNext ? `နောက်လ → ${targetLabel}` : `${targetLabel} ← ယခင်လ`;
+          }
+        } else if (badge) {
+          badge.classList.add('hidden');
+        }
+      };
+
+      const endDrag = () => {
+        if (!tracking) return;
+        tracking = false;
+        pointerId = null;
+
+        if (!isHorizontal) return;
+
+        const dt = Date.now() - startTime;
+        const absDx = Math.abs(lastDx);
+        if (absDx > 10) {
+          suppressCalendarClickUntil = Date.now() + 280;
+        }
+
+        const triggered = absDx >= 48 || (absDx >= 24 && dt <= 260);
+        if (triggered) {
+          resetVisual(false);
+          // Swipe Left (dx < 0) -> Next Month (+1); Swipe Right (dx > 0) -> Previous Month (-1)
+          stepCalendarMonth(lastDx < 0 ? 1 : -1);
+        } else {
+          resetVisual(true);
+        }
+      };
+
+      // Use Touch events for mobile/tablet + Mouse events for desktop (universal compatibility)
+      area.addEventListener('touchstart', (e) => {
+        if (!e.touches || e.touches.length !== 1) return;
+        startDrag(e.touches[0].clientX, e.touches[0].clientY, e.touches[0].identifier);
+      }, { passive: true });
+
+      area.addEventListener('touchmove', (e) => {
+        if (!tracking || !e.touches || e.touches.length !== 1) return;
+        moveDrag(e.touches[0].clientX, e.touches[0].clientY, e);
+      }, { passive: false });
+
+      area.addEventListener('touchend', () => endDrag(), { passive: true });
+      area.addEventListener('touchcancel', () => { tracking = false; resetVisual(true); }, { passive: true });
+
+      area.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        startDrag(e.clientX, e.clientY, 'mouse');
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!tracking || pointerId !== 'mouse') return;
+        moveDrag(e.clientX, e.clientY, e);
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (!tracking || pointerId !== 'mouse') return;
+        endDrag();
+      });
+
+      // Prevent accidental day-cell button click immediately after a horizontal drag
+      area.addEventListener('click', (e) => {
+        if (Date.now() < suppressCalendarClickUntil) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, true);
     }
 
     function jumpToToday() {
@@ -6963,6 +7191,7 @@ function doPost(e) {
     }
 
     function selectCalendarDay(iso) {
+      if (Date.now() < suppressCalendarClickUntil) return;
       uiState.selectedCalendarDay = iso;
       renderCalendarView();
       const panel = document.getElementById('calendarDayDetail');
@@ -7931,6 +8160,7 @@ function doPost(e) {
       populateMonthSelect();
       loadLocalState();
       renderAll();
+      initCalendarSwipe();
       initLiveClocks();
       startCloudAutoPolling();
       detectWebAuthnSupport().then(() => {
