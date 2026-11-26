@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html lang="my" data-theme="light">
+<html lang="my" data-theme="light" data-lang="dual">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>ပုပ္ပားတောင်ဥယျာဉ် | ပင်မစီမံခန့်ခွဲမှု စာမျက်နှာ (Management Portal)</title>
+  <title>ပုပ္ပားတောင်ဥယျာဉ် | Popa Mountain Park — Management Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script>
-    /* Prevent light/dark flash on load */
+    /* Prevent theme & language flash on page load */
     (function () {
       try {
         var t = localStorage.getItem('popa_portal_theme');
         if (t === 'dark' || (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
           document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        var l = localStorage.getItem('popa_portal_lang');
+        if (l === 'my' || l === 'en' || l === 'dual') {
+          document.documentElement.setAttribute('data-lang', l);
         }
       } catch (_) {}
     })();
@@ -23,25 +27,28 @@
       --bg-page: #f2f6f3;
       --bg-surface: #ffffff;
       --bg-subtle: #f6faf7;
-      --bg-nav: rgba(255, 255, 255, 0.88);
+      --bg-nav: rgba(255, 255, 255, 0.90);
       --text-primary: #0d1f18;
-      --text-secondary: #435a50;
-      --text-muted: #6c8278;
+      --text-secondary: #41594f;
+      --text-muted: #698076;
       --border-subtle: rgba(13, 43, 32, 0.09);
       --border-strong: rgba(13, 43, 32, 0.18);
       --brand-deep: #042f24;
       --brand-mid: #065f46;
       --brand-gold: #f59e0b;
 
-      /* Module Accent Palettes (Matched to each department dashboard) */
+      /* Full-width responsive gutter (minimal side margins!) */
+      --page-gutter: clamp(1rem, 2vw, 2.25rem);
+
+      /* Module Accent Palettes */
       --m-main: #059669;
-      --m-main-soft: rgba(5, 150, 105, 0.10);
+      --m-main-soft: rgba(5, 150, 105, 0.11);
       --m-admin: #2563eb;
-      --m-admin-soft: rgba(37, 99, 235, 0.10);
+      --m-admin-soft: rgba(37, 99, 235, 0.11);
       --m-ops: #0d9488;
-      --m-ops-soft: rgba(13, 148, 136, 0.10);
+      --m-ops-soft: rgba(13, 148, 136, 0.11);
       --m-fin: #7c3aed;
-      --m-fin-soft: rgba(124, 58, 237, 0.10);
+      --m-fin-soft: rgba(124, 58, 237, 0.11);
 
       --shadow-card: 0 14px 36px -8px rgba(4, 47, 36, 0.10), 0 4px 12px -4px rgba(4, 47, 36, 0.05);
       --shadow-hover: 0 24px 48px -12px rgba(4, 47, 36, 0.18), 0 8px 18px -6px rgba(4, 47, 36, 0.08);
@@ -54,10 +61,10 @@
       --bg-page: #0a1411;
       --bg-surface: #11201b;
       --bg-subtle: #162923;
-      --bg-nav: rgba(13, 25, 21, 0.88);
+      --bg-nav: rgba(13, 25, 21, 0.90);
       --text-primary: #edf6f1;
-      --text-secondary: #a7c0b5;
-      --text-muted: #789387;
+      --text-secondary: #a8c1b6;
+      --text-muted: #799488;
       --border-subtle: rgba(237, 246, 241, 0.09);
       --border-strong: rgba(237, 246, 241, 0.18);
       --m-main-soft: rgba(16, 185, 129, 0.18);
@@ -66,6 +73,16 @@
       --m-fin-soft: rgba(167, 139, 250, 0.18);
       --shadow-card: 0 16px 38px -8px rgba(0, 0, 0, 0.48);
       --shadow-hover: 0 26px 52px -10px rgba(0, 0, 0, 0.68);
+    }
+
+    /* Dual-Language Visibility Engine (Default: Dual MY + EN) */
+    [data-lang="my"] .lang-en,
+    [data-lang="my"] .lang-sep {
+      display: none !important;
+    }
+    [data-lang="en"] .lang-my,
+    [data-lang="en"] .lang-sep {
+      display: none !important;
     }
 
     * {
@@ -82,21 +99,23 @@
       font-family: "Noto Sans Myanmar", "Pyidaungsu", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--bg-page);
       color: var(--text-primary);
-      line-height: 1.68;
+      line-height: 1.66;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       transition: background-color var(--ease), color var(--ease);
     }
 
     /* ===================================================================== */
-    /* STICKY EXECUTIVE NAVIGATION BAR                                       */
+    /* STICKY FULL-WIDTH EXECUTIVE NAVIGATION BAR                            */
     /* ===================================================================== */
     .navbar {
       position: sticky;
       top: 0;
       z-index: 50;
+      width: 100%;
       background: var(--bg-nav);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -104,13 +123,15 @@
     }
 
     .nav-inner {
-      max-width: 1180px;
+      width: 100%;
+      max-width: none;
       margin: 0 auto;
-      padding: 0.75rem 1.5rem;
+      padding: 0.72rem var(--page-gutter);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .brand {
@@ -119,14 +140,15 @@
       gap: 0.85rem;
       text-decoration: none;
       color: inherit;
+      min-width: 0;
     }
 
     .brand-crest {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 12px;
       background: linear-gradient(135deg, #042f24 0%, #065f46 65%, #0f766e 100%);
-      border: 1px solid rgba(251, 191, 36, 0.5);
+      border: 1px solid rgba(251, 191, 36, 0.55);
       color: #fde68a;
       display: flex;
       align-items: center;
@@ -143,34 +165,44 @@
     .brand-copy {
       display: flex;
       flex-direction: column;
-      line-height: 1.25;
+      line-height: 1.28;
     }
 
     .brand-name {
-      font-size: 1.02rem;
+      font-size: 1.04rem;
       font-weight: 700;
       color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .brand-name .lang-en {
+      font-family: "Inter", sans-serif;
+      font-weight: 700;
+      color: var(--m-main);
     }
 
     .brand-sub {
-      font-family: "Inter", sans-serif;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-family: "Inter", "Noto Sans Myanmar", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
       color: var(--text-muted);
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 0.7rem;
+      gap: 0.65rem;
+      flex-wrap: wrap;
     }
 
     .clock-pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.55rem;
+      gap: 0.5rem;
       padding: 0.42rem 0.9rem;
       border-radius: 999px;
       background: var(--bg-subtle);
@@ -196,6 +228,41 @@
       50% { opacity: 0.55; transform: scale(0.85); }
     }
 
+    /* Language Mode Segmented Switcher */
+    .lang-switch {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem;
+      border-radius: 11px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      gap: 0.15rem;
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: "Inter", "Noto Sans Myanmar", sans-serif;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.3rem 0.62rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all var(--ease);
+      white-space: nowrap;
+    }
+
+    .lang-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .lang-btn.is-active {
+      background: var(--m-main);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.28);
+    }
+
     .theme-btn {
       display: inline-flex;
       align-items: center;
@@ -206,10 +273,11 @@
       background: var(--bg-surface);
       color: var(--text-secondary);
       font-family: "Inter", "Noto Sans Myanmar", sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       cursor: pointer;
       transition: all var(--ease);
+      white-space: nowrap;
     }
 
     .theme-btn:hover {
@@ -224,33 +292,34 @@
     }
 
     /* ===================================================================== */
-    /* HIGH-RESOLUTION MOUNT POPA & TAUNG KALAT HERO BANNER                  */
+    /* FULL-WIDTH MOUNT POPA & TAUNG KALAT HERO BANNER                       */
     /* ===================================================================== */
     .hero {
       position: relative;
-      min-height: 455px;
+      width: 100%;
+      min-height: 440px;
       color: #ffffff;
-      padding: 3.6rem 1.5rem 7.2rem;
+      padding: 3.1rem var(--page-gutter) 6.9rem;
       overflow: hidden;
       background-color: #052e22;
       background-image:
         linear-gradient(
           98deg,
-          rgba(4, 24, 18, 0.86) 0%,
-          rgba(5, 32, 24, 0.66) 36%,
-          rgba(5, 32, 24, 0.22) 64%,
-          rgba(5, 28, 22, 0.10) 100%
+          rgba(4, 24, 18, 0.88) 0%,
+          rgba(5, 32, 24, 0.68) 40%,
+          rgba(5, 32, 24, 0.24) 68%,
+          rgba(5, 28, 22, 0.12) 100%
         ),
         linear-gradient(
           180deg,
           rgba(3, 20, 15, 0.28) 0%,
           rgba(3, 20, 15, 0.04) 36%,
-          rgba(3, 20, 15, 0.22) 74%,
-          rgba(4, 22, 17, 0.80) 100%
+          rgba(3, 20, 15, 0.24) 74%,
+          rgba(4, 22, 17, 0.82) 100%
         ),
         var(--hero-photo);
       background-size: cover;
-      background-position: 60% 38%;
+      background-position: 62% 36%;
       background-repeat: no-repeat;
       display: flex;
       align-items: center;
@@ -259,8 +328,8 @@
     .hero-inner {
       position: relative;
       z-index: 2;
-      max-width: 1180px;
       width: 100%;
+      max-width: none;
       margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
@@ -270,43 +339,67 @@
     }
 
     .hero-copy {
-      max-width: 620px;
+      max-width: 900px;
+      flex: 1 1 540px;
     }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.32rem 0.9rem;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      padding: 0.34rem 0.95rem;
       border-radius: 999px;
-      background: rgba(4, 24, 18, 0.58);
-      border: 1px solid rgba(251, 191, 36, 0.45);
+      background: rgba(4, 24, 18, 0.60);
+      border: 1px solid rgba(251, 191, 36, 0.48);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       font-family: "Inter", "Noto Sans Myanmar", sans-serif;
-      font-size: 0.74rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      letter-spacing: 0.04em;
       color: #fde68a;
-      margin-bottom: 1rem;
+      margin-bottom: 0.95rem;
     }
 
     .hero h1 {
-      font-size: clamp(1.65rem, 3.2vw, 2.55rem);
+      font-size: clamp(1.65rem, 2.8vw, 2.5rem);
       font-weight: 700;
       line-height: 1.32;
-      margin-bottom: 0.7rem;
+      margin-bottom: 0.4rem;
       letter-spacing: -0.01em;
-      text-shadow: 0 3px 16px rgba(0, 0, 0, 0.52);
+      text-shadow: 0 3px 16px rgba(0, 0, 0, 0.55);
     }
 
-    .hero p {
-      font-size: 0.98rem;
-      color: rgba(240, 250, 245, 0.94);
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.52);
+    .hero-en-title {
+      font-family: "Inter", sans-serif;
+      font-size: clamp(1.02rem, 1.55vw, 1.35rem);
+      font-weight: 600;
+      color: #d1fae5;
+      letter-spacing: -0.005em;
+      margin-bottom: 0.85rem;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.52);
+    }
+
+    .hero-desc-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
       margin-bottom: 1.45rem;
-      max-width: 560px;
+      max-width: 820px;
+    }
+
+    .hero-desc-my {
+      font-size: 0.97rem;
+      color: rgba(244, 252, 248, 0.95);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.52);
+    }
+
+    .hero-desc-en {
+      font-family: "Inter", sans-serif;
+      font-size: 0.9rem;
+      color: rgba(214, 240, 228, 0.88);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.52);
     }
 
     .hero-stats {
@@ -316,36 +409,109 @@
     }
 
     .stat-chip {
-      background: rgba(4, 24, 18, 0.58);
+      background: rgba(4, 24, 18, 0.60);
       border: 1px solid rgba(255, 255, 255, 0.22);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-radius: 14px;
-      padding: 0.6rem 1rem;
-      min-width: 144px;
+      padding: 0.62rem 1.05rem;
+      min-width: 180px;
     }
 
     .stat-label {
       display: block;
       font-size: 0.72rem;
-      color: rgba(226, 242, 234, 0.82);
+      color: rgba(226, 242, 234, 0.84);
+      line-height: 1.4;
     }
 
     .stat-value {
       font-family: "Inter", "Noto Sans Myanmar", sans-serif;
-      font-size: 0.98rem;
+      font-size: 0.96rem;
       font-weight: 700;
       color: #ffffff;
+    }
+
+    .hero-aside {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.7rem;
+      flex-shrink: 0;
+    }
+
+    .developer-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.78rem;
+      padding: 0.68rem 1.08rem;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(4, 24, 18, 0.72), rgba(6, 54, 41, 0.62));
+      border: 1px solid rgba(251, 191, 36, 0.42);
+      border-left: 3px solid #fbbf24;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
+      max-width: 100%;
+    }
+
+    .developer-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(251, 191, 36, 0.14);
+      border: 1px solid rgba(251, 191, 36, 0.32);
+      color: #fde68a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .developer-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .developer-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.35;
+      text-align: left;
+    }
+
+    .developer-label {
+      font-family: "Inter", sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #fde68a;
+      margin-bottom: 0.1rem;
+    }
+
+    .developer-name {
+      font-family: "Inter", sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.005em;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    }
+
+    .developer-cred {
+      font-weight: 500;
+      color: #d1fae5;
     }
 
     .landmark-pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      padding: 0.45rem 0.95rem;
+      gap: 0.5rem;
+      padding: 0.48rem 1rem;
       border-radius: 999px;
-      background: rgba(4, 24, 18, 0.54);
-      border: 1px solid rgba(255, 255, 255, 0.24);
+      background: rgba(4, 24, 18, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.26);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       font-size: 0.8rem;
@@ -361,14 +527,14 @@
     }
 
     /* ===================================================================== */
-    /* MAIN PORTAL CARDS GRID                                                */
+    /* FULL-WIDTH MAIN PORTAL CARDS GRID (EDGE-TO-EDGE)                      */
     /* ===================================================================== */
     main {
       flex: 1;
-      max-width: 1180px;
       width: 100%;
-      margin: -4.1rem auto 3.25rem;
-      padding: 0 1.5rem;
+      max-width: none;
+      margin: -4.15rem auto 2.75rem;
+      padding: 0 var(--page-gutter);
       position: relative;
       z-index: 10;
     }
@@ -380,25 +546,33 @@
       flex-wrap: wrap;
       gap: 0.75rem;
       margin-bottom: 1.15rem;
-      padding: 0 0.25rem;
+      padding: 0 0.2rem;
     }
 
     .section-heading {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: #ffffff;
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.45rem;
     }
 
     .section-heading::before {
       content: "";
       width: 4px;
-      height: 16px;
+      height: 18px;
       border-radius: 999px;
       background: #fbbf24;
+      flex-shrink: 0;
+    }
+
+    .section-heading .lang-en {
+      font-family: "Inter", sans-serif;
+      font-weight: 600;
+      color: #fde68a;
     }
 
     .shortcut-bar {
@@ -406,8 +580,8 @@
       align-items: center;
       gap: 0.35rem;
       font-size: 0.78rem;
-      font-weight: 500;
-      color: rgba(245, 252, 248, 0.94);
+      font-weight: 600;
+      color: rgba(245, 252, 248, 0.95);
       text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
     }
 
@@ -415,12 +589,12 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 23px;
-      height: 23px;
+      min-width: 24px;
+      height: 24px;
       padding: 0 6px;
       border-radius: 6px;
-      background: rgba(4, 24, 18, 0.62);
-      border: 1px solid rgba(255, 255, 255, 0.32);
+      background: rgba(4, 24, 18, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.34);
       backdrop-filter: blur(6px);
       font-family: "Inter", monospace;
       font-size: 0.72rem;
@@ -431,7 +605,8 @@
     .portal-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.4rem;
+      gap: clamp(1.1rem, 1.7vw, 1.75rem);
+      width: 100%;
     }
 
     .module-card {
@@ -439,7 +614,7 @@
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-xl);
-      padding: 1.8rem;
+      padding: clamp(1.45rem, 2vw, 2rem);
       box-shadow: var(--shadow-card);
       display: flex;
       flex-direction: column;
@@ -459,7 +634,7 @@
     }
 
     .module-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-5px);
       box-shadow: var(--shadow-hover);
       border-color: var(--card-accent);
     }
@@ -474,7 +649,7 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 1rem;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.1rem;
     }
 
     .icon-box {
@@ -508,12 +683,12 @@
 
     .file-pill {
       font-family: "Inter", ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 0.76rem;
+      font-size: 0.77rem;
       font-weight: 600;
       color: var(--text-secondary);
       background: var(--bg-subtle);
       border: 1px solid var(--border-subtle);
-      padding: 0.24rem 0.68rem;
+      padding: 0.25rem 0.7rem;
       border-radius: 8px;
     }
 
@@ -523,17 +698,19 @@
       font-weight: 700;
       color: var(--card-accent);
       background: var(--card-tint);
-      padding: 0.16rem 0.6rem;
+      padding: 0.16rem 0.62rem;
       border-radius: 999px;
     }
 
     .module-card.is-recent .recent-badge {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
     }
 
     .module-kicker {
       font-family: "Inter", sans-serif;
-      font-size: 0.73rem;
+      font-size: 0.74rem;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -542,16 +719,27 @@
     }
 
     .card-title {
-      font-size: 1.24rem;
+      font-size: clamp(1.18rem, 1.45vw, 1.38rem);
       font-weight: 700;
       color: var(--text-primary);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.65rem;
       line-height: 1.38;
     }
 
     .card-primary-link {
       color: inherit;
       text-decoration: none;
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.35rem 0.5rem;
+    }
+
+    .card-primary-link .title-en {
+      font-family: "Inter", sans-serif;
+      font-size: 0.88em;
+      font-weight: 600;
+      color: var(--text-secondary);
     }
 
     .card-primary-link::after {
@@ -561,27 +749,50 @@
       z-index: 1;
     }
 
-    .card-desc {
-      font-size: 0.92rem;
+    .card-desc-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.42rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-desc-my {
+      font-size: 0.93rem;
       color: var(--text-secondary);
-      margin-bottom: 1.2rem;
+      line-height: 1.68;
+    }
+
+    .card-desc-en {
+      font-family: "Inter", sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.56;
     }
 
     .tag-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.45rem;
-      margin-bottom: 1.4rem;
+      gap: 0.48rem;
+      margin-bottom: 1.35rem;
     }
 
     .tag {
       font-size: 0.76rem;
       font-weight: 600;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       background: var(--bg-subtle);
       border: 1px solid var(--border-subtle);
-      padding: 0.22rem 0.65rem;
+      padding: 0.24rem 0.68rem;
       border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.32rem;
+    }
+
+    .tag .lang-en {
+      font-family: "Inter", sans-serif;
+      color: var(--text-muted);
+      font-weight: 600;
     }
 
     .card-footer {
@@ -590,6 +801,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
       gap: 0.75rem;
     }
 
@@ -618,11 +830,11 @@
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      padding: 0.38rem 0.75rem;
+      padding: 0.38rem 0.78rem;
       border-radius: 9px;
       border: 1px solid var(--border-subtle);
       background: var(--bg-subtle);
-      color: var(--text-muted);
+      color: var(--text-secondary);
       font-size: 0.76rem;
       font-weight: 600;
       text-decoration: none;
@@ -640,88 +852,110 @@
       height: 14px;
     }
 
-    /* Sync Info Note Banner */
+    /* Full-Width Sync & Security Info Banner */
     .sync-strip {
-      margin-top: 1.65rem;
+      margin-top: 1.5rem;
+      width: 100%;
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: 16px;
-      padding: 1.05rem 1.35rem;
+      padding: 1.1rem 1.4rem;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 0.9rem;
+      gap: 1rem;
       box-shadow: 0 4px 16px rgba(4, 47, 36, 0.04);
     }
 
     .sync-strip-left {
       display: flex;
-      align-items: center;
-      gap: 0.85rem;
+      align-items: flex-start;
+      gap: 0.9rem;
+      flex: 1 1 520px;
     }
 
     .sync-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 11px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
       background: var(--m-main-soft);
       color: var(--m-main);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      margin-top: 0.1rem;
     }
 
     .sync-strip h3 {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: var(--text-primary);
+      margin-bottom: 0.2rem;
     }
 
     .sync-strip p {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .sync-strip .sync-en {
+      font-family: "Inter", sans-serif;
+      font-size: 0.79rem;
+      color: var(--text-muted);
+      margin-top: 0.18rem;
+    }
+
+    .sync-badges {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .sync-badge {
       font-family: "Inter", monospace;
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      padding: 0.35rem 0.8rem;
+      padding: 0.36rem 0.82rem;
       border-radius: 999px;
       background: var(--m-main-soft);
       color: var(--m-main);
-      border: 1px solid rgba(5, 150, 105, 0.22);
+      border: 1px solid rgba(5, 150, 105, 0.24);
+      white-space: nowrap;
     }
 
-    /* Footer */
+    /* Full-Width Footer */
     footer {
+      width: 100%;
       border-top: 1px solid var(--border-subtle);
       background: var(--bg-surface);
-      padding: 1.3rem 1.5rem;
+      padding: 1.25rem var(--page-gutter);
       margin-top: auto;
     }
 
     .footer-inner {
-      max-width: 1180px;
+      width: 100%;
+      max-width: none;
       margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 0.75rem;
-      font-size: 0.84rem;
+      font-size: 0.83rem;
       color: var(--text-muted);
     }
 
     .footer-links {
       display: flex;
       align-items: center;
-      gap: 1.1rem;
+      gap: 1.15rem;
       flex-wrap: wrap;
       font-family: "Inter", monospace;
-      font-size: 0.78rem;
+      font-size: 0.79rem;
       font-weight: 600;
     }
 
@@ -736,8 +970,8 @@
       text-decoration: underline;
     }
 
-    /* Responsive Design */
-    @media (max-width: 880px) {
+    /* Responsive Breakpoints */
+    @media (max-width: 920px) {
       .portal-grid {
         grid-template-columns: 1fr;
       }
@@ -746,28 +980,29 @@
       }
       .hero {
         min-height: 410px;
-        padding: 2.6rem 1.2rem 6.1rem;
+        padding: 2.5rem var(--page-gutter) 6rem;
         background-position: 62% 36%;
         background-image:
           linear-gradient(
             180deg,
-            rgba(4, 24, 18, 0.62) 0%,
-            rgba(4, 24, 18, 0.34) 44%,
-            rgba(4, 24, 18, 0.84) 100%
+            rgba(4, 24, 18, 0.66) 0%,
+            rgba(4, 24, 18, 0.38) 44%,
+            rgba(4, 24, 18, 0.86) 100%
           ),
           var(--hero-photo);
-      }
-      main {
-        padding: 0 1.15rem;
       }
       .shortcut-bar {
         display: none;
       }
+      .hero-aside {
+        align-items: flex-start;
+        width: 100%;
+      }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 520px) {
       .module-card {
-        padding: 1.35rem;
+        padding: 1.3rem;
       }
       .brand-sub {
         display: none;
@@ -776,15 +1011,15 @@
         width: 100%;
       }
       .stat-chip {
-        flex: 1;
-        min-width: 120px;
+        flex: 1 1 140px;
+        min-width: 135px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Navigation -->
+  <!-- Full-Width Sticky Top Navigation -->
   <nav class="navbar">
     <div class="nav-inner">
       <a href="index.html" class="brand">
@@ -797,17 +1032,34 @@
           </svg>
         </div>
         <div class="brand-copy">
-          <span class="brand-name">ပုပ္ပားတောင်ဥယျာဉ်</span>
-          <span class="brand-sub">Management Portal</span>
+          <span class="brand-name">
+            <span class="lang-my">ပုပ္ပားတောင်ဥယျာဉ်</span>
+            <span class="lang-sep">&bull;</span>
+            <span class="lang-en">Popa Mountain Park</span>
+          </span>
+          <span class="brand-sub">
+            <span class="lang-my">စီမံခန့်ခွဲမှု ပင်မစာမျက်နှာ</span>
+            <span class="lang-sep">&bull;</span>
+            <span class="lang-en">EXECUTIVE MANAGEMENT PORTAL</span>
+          </span>
         </div>
       </a>
 
       <div class="nav-actions">
         <div class="clock-pill" aria-live="polite">
           <span class="pulse-dot"></span>
-          <span id="clockText">စနစ်အသင့်ဖြစ်သည်</span>
+          <span id="clockText">System Ready</span>
         </div>
-        <button class="theme-btn" id="themeToggle" type="button" title="အလင်း / အမှောင် ပြောင်းရန်" aria-label="Toggle dark mode">
+
+        <!-- Dual / Burmese / English Language Switcher -->
+        <div class="lang-switch" role="group" aria-label="Language Display Mode">
+          <button type="button" class="lang-btn is-active" data-set-lang="dual" title="မြန်မာ + English နှစ်ဘာသာဖြင့် ကြည့်ရန်">မြန်မာ / EN</button>
+          <button type="button" class="lang-btn" data-set-lang="my" title="မြန်မာဘာသာဖြင့်သာ ကြည့်ရန်">မြန်မာ</button>
+          <button type="button" class="lang-btn" data-set-lang="en" title="English Only">EN</button>
+        </div>
+
+        <!-- Light / Dark Theme Toggle -->
+        <button class="theme-btn" id="themeToggle" type="button" title="အလင်း / အမှောင် ပြောင်းရန် (Switch Light / Dark)" aria-label="Toggle dark mode">
           <svg id="sunIcon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:none;">
             <circle cx="12" cy="12" r="5"></circle>
             <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -828,48 +1080,99 @@
     </div>
   </nav>
 
-  <!-- High-Resolution Mount Popa & Taung Kalat Hero Banner -->
+  <!-- Full-Width Mount Popa & Taung Kalat Scenic Hero Banner -->
   <header class="hero">
     <div class="hero-inner">
       <div class="hero-copy">
         <div class="eyebrow">
-          <span>Popa Mountain Park &bull; Integrated Database Hub</span>
+          <span class="lang-my">ပုပ္ပားတောင်ဥယျာဉ် • ပေါင်းစပ်ဒေတာဘေ့စ်ဗဟိုစနစ်</span>
+          <span class="lang-sep">|</span>
+          <span class="lang-en">POPA MOUNTAIN PARK &bull; INTEGRATED DATABASE HUB</span>
         </div>
-        <h1>ပုပ္ပားတောင်ဥယျာဉ် — ပင်မစီမံခန့်ခွဲမှု စာမျက်နှာ</h1>
-        <p>ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး ပင်မဒေတာဘေ့စ်နှင့် ဌာနစိတ် (၃) ခုလုံး၏ နေ့စဉ်လုပ်ငန်းစောင့်ကြည့်ကြီးကြပ်မှု စနစ်များကို တစ်နေရာတည်းမှ တိုက်ရိုက်ရွေးချယ်ဖွင့်လှစ်နိုင်ပါသည်။</p>
+
+        <h1 class="lang-my">ပုပ္ပားတောင်ဥယျာဉ် — ပင်မစီမံခန့်ခွဲမှု စာမျက်နှာ</h1>
+        <div class="hero-en-title lang-en">Popa Mountain Park — Integrated Management Portal</div>
+
+        <div class="hero-desc-group">
+          <p class="hero-desc-my lang-my">ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး ပင်မဒေတာဘေ့စ်နှင့် ဌာနစိတ် (၃) ခုလုံး၏ နေ့စဉ်လုပ်ငန်းစောင့်ကြည့်ကြီးကြပ်မှု စနစ်များကို တစ်နေရာတည်းမှ တိုက်ရိုက်ရွေးချယ်ဖွင့်လှစ်နိုင်ပါသည်။</p>
+          <p class="hero-desc-en lang-en">Centralized executive workspace to directly access the Park Warden's Master Database, Excel (.xlsm) / QGIS launchers, and daily supervision dashboards across all three divisions.</p>
+        </div>
 
         <div class="hero-stats">
           <div class="stat-chip">
-            <span class="stat-label">ချိတ်ဆက်ထားသည့် စနစ်</span>
-            <span class="stat-value">၄ ခု (Modules)</span>
+            <span class="stat-label">
+              <span class="lang-my">ချိတ်ဆက်ထားသည့် စနစ်</span>
+              <span class="lang-sep">/</span>
+              <span class="lang-en">Connected Modules</span>
+            </span>
+            <span class="stat-value">
+              <span class="lang-my">၄ ခု</span>
+              <span class="lang-sep">&bull;</span>
+              <span class="lang-en">4 Modules</span>
+            </span>
           </div>
           <div class="stat-chip">
-            <span class="stat-label">လုပ်ငန်းစောင့်ကြည့်ကာလ</span>
-            <span class="stat-value">၂၀၂၆ – ၂၀၃၁ (၅၃ လ)</span>
+            <span class="stat-label">
+              <span class="lang-my">လုပ်ငန်းစောင့်ကြည့်ကာလ</span>
+              <span class="lang-sep">/</span>
+              <span class="lang-en">Supervision Period</span>
+            </span>
+            <span class="stat-value">
+              <span class="lang-my">၂၀၂၆ – ၂၀၃၁ (၅၃ လ)</span>
+              <span class="lang-sep">&bull;</span>
+              <span class="lang-en">2026–2031 (53 Mos)</span>
+            </span>
           </div>
           <div class="stat-chip">
-            <span class="stat-label">Cloud Sync စနစ်</span>
-            <span class="stat-value">AD_Db_Sync Ready</span>
+            <span class="stat-label">
+              <span class="lang-my">Cloud Sync နှင့် လုံခြုံရေး</span>
+              <span class="lang-sep">/</span>
+              <span class="lang-en">Cloud Sync &amp; Security</span>
+            </span>
+            <span class="stat-value">AD_Db_Sync &bull; SHA-256</span>
           </div>
         </div>
       </div>
 
-      <div class="landmark-pill">
-        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-          <circle cx="12" cy="10" r="3"></circle>
-        </svg>
-        <span>ပုပ္ပားတောင်မကြီး နှင့် တောင်ကလပ်</span>
+      <div class="hero-aside">
+        <div class="developer-card" aria-label="Developer Credit">
+          <div class="developer-icon" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <div class="developer-text">
+            <span class="developer-label">Developed by:</span>
+            <span class="developer-name">Dr. Kyaw Sein Win Tun <span class="developer-cred">(Ph.D, Cambridge, UK)</span></span>
+          </div>
+        </div>
+
+        <div class="landmark-pill">
+          <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span class="lang-my">ပုပ္ပားတောင်မကြီး နှင့် တောင်ကလပ်</span>
+          <span class="lang-sep">&bull;</span>
+          <span class="lang-en">Mount Popa &amp; Taung Kalat</span>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- Main Portal Content -->
+  <!-- Full-Width Main Portal Grid -->
   <main>
     <div class="section-bar">
-      <div class="section-heading">အသုံးပြုလိုသည့် ဌာနစိတ် / စနစ်ကို ရွေးချယ်ဖွင့်လှစ်ပါ</div>
+      <div class="section-heading">
+        <span class="lang-my">အသုံးပြုလိုသည့် ဌာနစိတ် / စနစ်ကို ရွေးချယ်ဖွင့်လှစ်ပါ</span>
+        <span class="lang-sep">&bull;</span>
+        <span class="lang-en">Select a Division or System Module to Launch</span>
+      </div>
       <div class="shortcut-bar">
-        <span>အမြန်ဖွင့်ရန် ခလုတ်များ:</span>
+        <span class="lang-my">အမြန်ဖွင့်ရန် ခလုတ်များ</span>
+        <span class="lang-sep">/</span>
+        <span class="lang-en">Quick Keys</span>:
         <span class="kbd">1</span>
         <span class="kbd">2</span>
         <span class="kbd">3</span>
@@ -893,33 +1196,49 @@
             </div>
             <div class="card-meta-right">
               <span class="file-pill">01_Main.html</span>
-              <span class="recent-badge">နောက်ဆုံးဖွင့်ခဲ့သည်</span>
+              <span class="recent-badge">
+                <span class="lang-my">နောက်ဆုံးဖွင့်ခဲ့သည်</span>
+                <span class="lang-sep">&bull;</span>
+                <span class="lang-en">Recently Opened</span>
+              </span>
             </div>
           </div>
 
-          <div class="module-kicker">Module 01 &bull; Executive Hub</div>
+          <div class="module-kicker">Module 01 &bull; Executive Supervision Hub</div>
           <h2 class="card-title">
-            <a href="01_Main.html" class="card-primary-link" data-track="01_Main.html">ပင်မ ဒေတာဘေ့စ်စနစ် (Main Hub)</a>
+            <a href="01_Main.html" class="card-primary-link" data-track="01_Main.html">
+              <span class="lang-my">ပင်မ ဒေတာဘေ့စ်စနစ်</span>
+              <span class="lang-sep">&bull;</span>
+              <span class="title-en lang-en">Main Executive Hub</span>
+            </a>
           </h2>
-          <p class="card-desc">ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး ကြီးကြပ်မှုဗဟိုချက်။ ဌာနစိတ် (၃) ခုလုံး၏ ပြီးစီးမှုအခြေအနေ၊ Excel ဒေတာဘေ့စ် (၄) ခုနှင့် QGIS စနစ်တို့ကို တစ်နေရာတည်းမှ စောင့်ကြည့်ကြီးကြပ်ရန်။</p>
+
+          <div class="card-desc-wrap">
+            <p class="card-desc-my lang-my">ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး ကြီးကြပ်မှုဗဟိုချက်။ ဌာနစိတ် (၃) ခုလုံး၏ ပြီးစီးမှုအခြေအနေ၊ Excel ဒေတာဘေ့စ် (၄) ခု (ဝင်စာ/ထွက်စာအပါအဝင်) နှင့် QGIS စနစ်တို့ကို တစ်နေရာတည်းမှ စောင့်ကြည့်ကြီးကြပ်ရန်။</p>
+            <p class="card-desc-en lang-en">Park Warden's central supervision hub to monitor progress across all three divisions, launch all 4 Excel databases (including Incoming/Outgoing Dispatch), and open the Park QGIS mapping project.</p>
+          </div>
 
           <div class="tag-row">
-            <span class="tag">ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး</span>
-            <span class="tag">Excel ၄ ခု + QGIS</span>
-            <span class="tag">ကြီးကြပ်မှုမုဒ်</span>
+            <span class="tag"><span class="lang-my">ဥယျာဉ်အုပ်ချုပ်ရေးမှူးရုံး</span><span class="lang-sep">/</span><span class="lang-en">Warden Office</span></span>
+            <span class="tag"><span class="lang-my">Excel ၄ ခု + ဝင်စာ/ထွက်စာ + QGIS</span><span class="lang-sep">/</span><span class="lang-en">4 Excel DBs + Dispatch + QGIS</span></span>
+            <span class="tag"><span class="lang-my">ကြီးကြပ်မှုမုဒ်</span><span class="lang-sep">/</span><span class="lang-en">Supervisor Mode</span></span>
           </div>
         </div>
 
         <div class="card-footer">
           <span class="open-cta">
-            စာမျက်နှာ ဖွင့်လှစ်ရန်
+            <span class="lang-my">စာမျက်နှာ ဖွင့်လှစ်ရန်</span>
+            <span class="lang-sep">/</span>
+            <span class="lang-en">Open Module</span>
             <svg fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </span>
-          <a href="01_Main.html" target="_blank" rel="noopener" class="newtab-btn" data-track="01_Main.html" title="Tab အသစ်ဖြင့် ဖွင့်ရန်">
-            Tab အသစ်
+          <a href="01_Main.html" target="_blank" rel="noopener" class="newtab-btn" data-track="01_Main.html" title="Tab အသစ်ဖြင့် ဖွင့်ရန် / Open in New Tab">
+            <span class="lang-my">Tab အသစ်</span>
+            <span class="lang-sep">/</span>
+            <span class="lang-en">New Tab</span>
             <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
@@ -943,33 +1262,49 @@
             </div>
             <div class="card-meta-right">
               <span class="file-pill">02_Admin.html</span>
-              <span class="recent-badge">နောက်ဆုံးဖွင့်ခဲ့သည်</span>
+              <span class="recent-badge">
+                <span class="lang-my">နောက်ဆုံးဖွင့်ခဲ့သည်</span>
+                <span class="lang-sep">&bull;</span>
+                <span class="lang-en">Recently Opened</span>
+              </span>
             </div>
           </div>
 
-          <div class="module-kicker">Module 02 &bull; Administration</div>
+          <div class="module-kicker">Module 02 &bull; Administration &amp; Dispatch</div>
           <h2 class="card-title">
-            <a href="02_Admin.html" class="card-primary-link" data-track="02_Admin.html">စီမံဌာနစိတ် (Admin Section)</a>
+            <a href="02_Admin.html" class="card-primary-link" data-track="02_Admin.html">
+              <span class="lang-my">စီမံဌာနစိတ်</span>
+              <span class="lang-sep">&bull;</span>
+              <span class="title-en lang-en">Administration Section</span>
+            </a>
           </h2>
-          <p class="card-desc">ဝန်ထမ်းအင်အားပြန်တမ်း၊ ရုံးဂျူတီဇယား၊ ဒါဘာမှတ်တမ်း၊ ယာဉ်နှင့် ရုံးသုံးစက်ပစ္စည်းပြန်တမ်းများနှင့် စီမံဒေတာဘေ့စ် (.xlsm) နေ့စဉ်လုပ်ငန်းများ ဆောင်ရွက်ရန်။</p>
+
+          <div class="card-desc-wrap">
+            <p class="card-desc-my lang-my">ဝန်ထမ်းအင်အားပြန်တမ်း၊ ရုံးဂျူတီဇယား၊ ဒါဘာမှတ်တမ်း၊ ယာဉ်နှင့် ရုံးသုံးစက်ပစ္စည်းပြန်တမ်းများ၊ စီမံဒေတာဘေ့စ် (.xlsm) နှင့် ဝင်စာ/ထွက်စာ (Dispatch) လုပ်ငန်းများ ဆောင်ရွက်ရန်။</p>
+            <p class="card-desc-en lang-en">Manage staff strength returns, duty rosters, meeting minutes, vehicle &amp; equipment inventories, Admin Database (.xlsm), and Incoming/Outgoing Dispatch correspondence.</p>
+          </div>
 
           <div class="tag-row">
-            <span class="tag">၀၂_စီမံဌာနစိတ်</span>
-            <span class="tag">ဝန်ထမ်းရေးရာ</span>
-            <span class="tag">စီမံဒေတာဘေ့စ်</span>
+            <span class="tag"><span class="lang-my">၀၂_စီမံဌာနစိတ်</span><span class="lang-sep">/</span><span class="lang-en">Admin Division</span></span>
+            <span class="tag"><span class="lang-my">ဝန်ထမ်းရေးရာ</span><span class="lang-sep">/</span><span class="lang-en">HR &amp; Rosters</span></span>
+            <span class="tag"><span class="lang-my">ဝင်စာ/ထွက်စာ</span><span class="lang-sep">/</span><span class="lang-en">Dispatch DB</span></span>
           </div>
         </div>
 
         <div class="card-footer">
           <span class="open-cta">
-            စာမျက်နှာ ဖွင့်လှစ်ရန်
+            <span class="lang-my">စာမျက်နှာ ဖွင့်လှစ်ရန်</span>
+            <span class="lang-sep">/</span>
+            <span class="lang-en">Open Module</span>
             <svg fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </span>
-          <a href="02_Admin.html" target="_blank" rel="noopener" class="newtab-btn" data-track="02_Admin.html" title="Tab အသစ်ဖြင့် ဖွင့်ရန်">
-            Tab အသစ်
+          <a href="02_Admin.html" target="_blank" rel="noopener" class="newtab-btn" data-track="02_Admin.html" title="Tab အသစ်ဖြင့် ဖွင့်ရန် / Open in New Tab">
+            <span class="lang-my">Tab အသစ်</span>
+            <span class="lang-sep">/</span>
+            <span class="lang-en">New Tab</span>
             <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
@@ -992,33 +1327,49 @@
             </div>
             <div class="card-meta-right">
               <span class="file-pill">03_Operations.html</span>
-              <span class="recent-badge">နောက်ဆုံးဖွင့်ခဲ့သည်</span>
+              <span class="recent-badge">
+                <span class="lang-my">နောက်ဆုံးဖွင့်ခဲ့သည်</span>
+                <span class="lang-sep">&bull;</span>
+                <span class="lang-en">Recently Opened</span>
+              </span>
             </div>
           </div>
 
-          <div class="module-kicker">Module 03 &bull; Field Operations</div>
+          <div class="module-kicker">Module 03 &bull; Field Operations &amp; GIS</div>
           <h2 class="card-title">
-            <a href="03_Operations.html" class="card-primary-link" data-track="03_Operations.html">လုပ်ငန်းဌာနစိတ် (Operations Section)</a>
+            <a href="03_Operations.html" class="card-primary-link" data-track="03_Operations.html">
+              <span class="lang-my">လုပ်ငန်းဌာနစိတ်</span>
+              <span class="lang-sep">&bull;</span>
+              <span class="title-en lang-en">Operations &amp; GIS Section</span>
+            </a>
           </h2>
-          <p class="card-desc">အပတ်စဉ် အယ်လ်နီးညိုနှင့် RNH လုပ်ငန်းဇယား၊ ကွင်းဆင်းစစ်ဆေးမှု၊ ပြည်ထောင်စုရန်ပုံငွေစီမံကိန်းနှင့် လုပ်ငန်းဒေတာဘေ့စ် (.xlsm) တိုးတက်မှုအစီရင်ခံစာများ ခြေရာခံရန်။</p>
+
+          <div class="card-desc-wrap">
+            <p class="card-desc-my lang-my">အပတ်စဉ် အယ်လ်နီးညိုနှင့် RNH လုပ်ငန်းဇယား၊ ကွင်းဆင်းစစ်ဆေးမှု၊ ပြည်ထောင်စုရန်ပုံငွေစီမံကိန်း၊ လုပ်ငန်းဒေတာဘေ့စ် (.xlsm) နှင့် QGIS (GIS Project) တို့ကို ခြေရာခံဆောင်ရွက်ရန်။</p>
+            <p class="card-desc-en lang-en">Track weekly El Ni&ntilde;o &amp; RNH schedules, field patrols, Union Fund conservation projects, Operations Database (.xlsm), and directly launch the Park QGIS project (.qgz).</p>
+          </div>
 
           <div class="tag-row">
-            <span class="tag">၀၃_လုပ်ငန်းဌာနစိတ်</span>
-            <span class="tag">RNH / အယ်လ်နီးညို</span>
-            <span class="tag">လုပ်ငန်းဒေတာဘေ့စ်</span>
+            <span class="tag"><span class="lang-my">၀၃_လုပ်ငန်းဌာနစိတ်</span><span class="lang-sep">/</span><span class="lang-en">Operations</span></span>
+            <span class="tag"><span class="lang-my">RNH / အယ်လ်နီးညို</span><span class="lang-sep">/</span><span class="lang-en">Field Patrol</span></span>
+            <span class="tag"><span class="lang-my">လုပ်ငန်း Excel + QGIS</span><span class="lang-sep">/</span><span class="lang-en">Excel + QGIS (.qgz)</span></span>
           </div>
         </div>
 
         <div class="card-footer">
           <span class="open-cta">
-            စာမျက်နှာ ဖွင့်လှစ်ရန်
+            <span class="lang-my">စာမျက်နှာ ဖွင့်လှစ်ရန်</span>
+            <span class="lang-sep">/</span>
+            <span class="lang-en">Open Module</span>
             <svg fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </span>
-          <a href="03_Operations.html" target="_blank" rel="noopener" class="newtab-btn" data-track="03_Operations.html" title="Tab အသစ်ဖြင့် ဖွင့်ရန်">
-            Tab အသစ်
+          <a href="03_Operations.html" target="_blank" rel="noopener" class="newtab-btn" data-track="03_Operations.html" title="Tab အသစ်ဖြင့် ဖွင့်ရန် / Open in New Tab">
+            <span class="lang-my">Tab အသစ်</span>
+            <span class="lang-sep">/</span>
+            <span class="lang-en">New Tab</span>
             <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
@@ -1040,33 +1391,49 @@
             </div>
             <div class="card-meta-right">
               <span class="file-pill">04_Finance.html</span>
-              <span class="recent-badge">နောက်ဆုံးဖွင့်ခဲ့သည်</span>
+              <span class="recent-badge">
+                <span class="lang-my">နောက်ဆုံးဖွင့်ခဲ့သည်</span>
+                <span class="lang-sep">&bull;</span>
+                <span class="lang-en">Recently Opened</span>
+              </span>
             </div>
           </div>
 
           <div class="module-kicker">Module 04 &bull; Finance &amp; Accounts</div>
           <h2 class="card-title">
-            <a href="04_Finance.html" class="card-primary-link" data-track="04_Finance.html">ငွေစာရင်းဌာနစိတ် (Finance Section)</a>
+            <a href="04_Finance.html" class="card-primary-link" data-track="04_Finance.html">
+              <span class="lang-my">ငွေစာရင်းဌာနစိတ်</span>
+              <span class="lang-sep">&bull;</span>
+              <span class="title-en lang-en">Finance &amp; Accounts Section</span>
+            </a>
           </h2>
-          <p class="card-desc">လစဉ် ဘဏ္ဍာရေးလချုပ်၊ လစာစရိတ်၊ ဘဏ်ရှင်းတမ်းညှိနှိုင်းမှု၊ နှစ်ချုပ်စာရင်းနှင့် အရအသုံးခန့်မှန်းခြေ ငွေစာရင်းဒေတာဘေ့စ် (.xlsm) များကို စစ်ဆေးစီမံရန်။</p>
+
+          <div class="card-desc-wrap">
+            <p class="card-desc-my lang-my">လစဉ် ဘဏ္ဍာရေးလချုပ်၊ လစာစရိတ်၊ ဘဏ်ရှင်းတမ်းညှိနှိုင်းမှု၊ နှစ်ချုပ်စာရင်းနှင့် အရအသုံးခန့်မှန်းခြေ ငွေစာရင်းဒေတာဘေ့စ် (.xlsm) များကို စစ်ဆေးစီမံရန်။</p>
+            <p class="card-desc-en lang-en">Oversee monthly financial summaries, payroll &amp; allowances, bank reconciliations, annual statements, and budget estimates via the Finance Database (.xlsm).</p>
+          </div>
 
           <div class="tag-row">
-            <span class="tag">၀၁_ငွေစာရင်းဌာနစိတ်</span>
-            <span class="tag">ဘဏ္ဍာရေး/ဘဏ်ရှင်းတမ်း</span>
-            <span class="tag">ငွေစာရင်းဒေတာဘေ့စ်</span>
+            <span class="tag"><span class="lang-my">၀၁_ငွေစာရင်းဌာနစိတ်</span><span class="lang-sep">/</span><span class="lang-en">Finance Division</span></span>
+            <span class="tag"><span class="lang-my">ဘဏ္ဍာရေး/ဘဏ်ရှင်းတမ်း</span><span class="lang-sep">/</span><span class="lang-en">Accounts &amp; Bank</span></span>
+            <span class="tag"><span class="lang-my">ငွေစာရင်းဒေတာဘေ့စ်</span><span class="lang-sep">/</span><span class="lang-en">Budget DB (.xlsm)</span></span>
           </div>
         </div>
 
         <div class="card-footer">
           <span class="open-cta">
-            စာမျက်နှာ ဖွင့်လှစ်ရန်
+            <span class="lang-my">စာမျက်နှာ ဖွင့်လှစ်ရန်</span>
+            <span class="lang-sep">/</span>
+            <span class="lang-en">Open Module</span>
             <svg fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </span>
-          <a href="04_Finance.html" target="_blank" rel="noopener" class="newtab-btn" data-track="04_Finance.html" title="Tab အသစ်ဖြင့် ဖွင့်ရန်">
-            Tab အသစ်
+          <a href="04_Finance.html" target="_blank" rel="noopener" class="newtab-btn" data-track="04_Finance.html" title="Tab အသစ်ဖြင့် ဖွင့်ရန် / Open in New Tab">
+            <span class="lang-my">Tab အသစ်</span>
+            <span class="lang-sep">/</span>
+            <span class="lang-en">New Tab</span>
             <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
@@ -1078,27 +1445,41 @@
 
     </div>
 
-    <!-- Compact Integration Strip -->
-    <section class="sync-strip" aria-label="စနစ်ချိတ်ဆက်မှု အချက်အလက်">
+    <!-- Full-Width Integration & Security Strip -->
+    <section class="sync-strip" aria-label="System Integration Details">
       <div class="sync-strip-left">
         <div class="sync-icon" aria-hidden="true">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
             <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
           </svg>
         </div>
         <div>
-          <h3>စာမျက်နှာ (၄) ခုလုံး အပြန်အလှန် ချိတ်ဆက်ထားသည်</h3>
-          <p>ဌာနစိတ် စာမျက်နှာတစ်ခုချင်းစီ၏ အပေါ်ဘယ်ဘက်ထောင့်ရှိ <strong>ပင်မမီနူးသို့ ပြန်ရန် (Back to Portal)</strong> ခလုတ်မှတစ်ဆင့် ဤစာမျက်နှာသို့ အချိန်မရွေး ပြန်လာနိုင်ပါသည်။</p>
+          <h3>
+            <span class="lang-my">စာမျက်နှာ (၄) ခုလုံး အပြန်အလှန် ချိတ်ဆက်၍ လုံခြုံရေးစနစ် တပ်ဆင်ထားသည်</span>
+            <span class="lang-sep">&bull;</span>
+            <span class="lang-en">All 4 Modules Interconnected &amp; SHA-256 Protected</span>
+          </h3>
+          <p class="lang-my">ဌာနစိတ် စာမျက်နှာတစ်ခုချင်းစီ၏ အပေါ်ဘယ်ဘက်ထောင့်ရှိ <strong>ပင်မမီနူးသို့ ပြန်ရန် (Back to Portal)</strong> ခလုတ်မှတစ်ဆင့် ဤစာမျက်နှာသို့ အချိန်မရွေး ပြန်လာနိုင်ပြီး ဝင်ရောက်ခွင့်စကားဝှက် (Welcome Login Gateway) ဖြင့် ကာကွယ်ထားပါသည်။</p>
+          <p class="sync-en lang-en">Return to this portal anytime using the <strong>Back to Portal</strong> button in the top-left corner of each module. Every dashboard is protected with a PBKDF2-SHA256 Welcome Login Gateway and synced via AD_Db_Sync.</p>
         </div>
       </div>
-      <span class="sync-badge">GitHub Pages Ready</span>
+      <div class="sync-badges">
+        <span class="sync-badge">AD_Db_Sync</span>
+        <span class="sync-badge">SHA-256 Vault</span>
+        <span class="sync-badge">GitHub Pages Ready</span>
+      </div>
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- Full-Width Footer -->
   <footer>
     <div class="footer-inner">
-      <div>&copy; <span id="yearNow">2026</span> ပုပ္ပားတောင်ဥယျာဉ် &bull; စီမံခန့်ခွဲမှု ပင်မစာမျက်နှာ</div>
+      <div>
+        &copy; <span id="yearNow">2026</span>
+        <span class="lang-my">ပုပ္ပားတောင်ဥယျာဉ် &bull; စီမံခန့်ခွဲမှု ပင်မစာမျက်နှာ</span>
+        <span class="lang-sep">|</span>
+        <span class="lang-en">Popa Mountain Park &bull; Executive Management Portal</span>
+      </div>
       <div class="footer-links">
         <a href="01_Main.html">01_Main</a>
         <a href="02_Admin.html">02_Admin</a>
@@ -1133,8 +1514,29 @@
       updateClock();
       setInterval(updateClock, 1000);
 
-      // 2. Theme Toggle (Light / Dark) with Persistence
+      // 2. Language Display Mode Switcher (Dual [Default] / Burmese / English)
       const htmlEl = document.documentElement;
+      const langBtns = document.querySelectorAll('[data-set-lang]');
+
+      function syncLangUI() {
+        const current = htmlEl.getAttribute('data-lang') || 'dual';
+        langBtns.forEach(btn => {
+          btn.classList.toggle('is-active', btn.getAttribute('data-set-lang') === current);
+        });
+        htmlEl.setAttribute('lang', current === 'en' ? 'en' : 'my');
+      }
+
+      langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const nextLang = btn.getAttribute('data-set-lang');
+          htmlEl.setAttribute('data-lang', nextLang);
+          try { localStorage.setItem('popa_portal_lang', nextLang); } catch (_) {}
+          syncLangUI();
+        });
+      });
+      syncLangUI();
+
+      // 3. Theme Toggle (Light / Dark) with Persistence
       const themeBtn = document.getElementById('themeToggle');
       const sunIcon = document.getElementById('sunIcon');
       const moonIcon = document.getElementById('moonIcon');
@@ -1155,7 +1557,7 @@
         syncThemeUI();
       });
 
-      // 3. Remember Recently Opened Module
+      // 4. Remember Recently Opened Module
       const recentKey = 'popa_portal_last_module';
       try {
         const lastFile = localStorage.getItem(recentKey);
@@ -1171,7 +1573,7 @@
         });
       });
 
-      // 4. Keyboard Shortcuts (1, 2, 3, 4)
+      // 5. Quick Keyboard Shortcuts (1, 2, 3, 4)
       const shortcutMap = {
         '1': '01_Main.html',
         '2': '02_Admin.html',
