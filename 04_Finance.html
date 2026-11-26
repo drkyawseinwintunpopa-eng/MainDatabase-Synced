@@ -578,7 +578,20 @@
 
     <input type="file" id="headerBgFileInput" accept="image/*" class="hidden" onchange="handleHeaderBgUpload(event)" />
 
-    <div class="relative z-10 w-full px-3 sm:px-5 lg:px-7 xl:px-8 pt-4 pb-4">
+    <div class="relative z-10 w-full px-3 sm:px-5 lg:px-7 xl:px-8 pt-2.5 pb-4">
+
+      <!-- Top-Left Corner: Back to Portal Button -->
+      <div class="mb-2.5 flex items-center justify-between gap-2 no-print">
+        <a href="index.html"
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950/45 hover:bg-slate-950/65 backdrop-blur-md border border-amber-300/45 hover:border-amber-300/80 text-white text-xs font-semibold shadow-sm transition-all duration-200 hover:-translate-y-0.5 group"
+          title="ပင်မစာမျက်နှာ (index.html) သို့ ပြန်သွားရန်">
+          <svg class="w-3.5 h-3.5 text-amber-300 transition-transform duration-200 group-hover:-translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>ပင်မမီနူးသို့ ပြန်ရန် (Back to Portal)</span>
+        </a>
+      </div>
 
       <!-- Row 1: Park Emblem & Main Title (Left) + Analog & Digital Clocks (Top-Right Corner) -->
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
