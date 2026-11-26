@@ -225,9 +225,30 @@
     .shake-error { animation: shakeError 0.36s ease-in-out; }
 
     .vault-overlay {
-      background: radial-gradient(circle at 20% 20%, rgba(6, 78, 59, 0.94) 0%, rgba(4, 24, 20, 0.98) 65%, rgba(2, 12, 10, 0.99) 100%);
+      background: radial-gradient(circle at 20% 20%, rgba(6, 78, 59, 0.96) 0%, rgba(4, 24, 20, 0.99) 65%, rgba(2, 12, 10, 1) 100%);
       backdrop-filter: blur(22px);
       -webkit-backdrop-filter: blur(22px);
+    }
+
+    /* Hide all dashboard & database content behind Welcome Login Screen while locked */
+    body.vault-locked {
+      overflow: hidden !important;
+    }
+    body.vault-locked > header,
+    body.vault-locked > main,
+    body.vault-locked > footer,
+    body.vault-locked > nav {
+      visibility: hidden !important;
+      pointer-events: none !important;
+      user-select: none !important;
+    }
+    @media print {
+      body.vault-locked > header,
+      body.vault-locked > main,
+      body.vault-locked > footer,
+      body.vault-locked > nav {
+        display: none !important;
+      }
     }
 
     /* User Font Scale & Compact Density Preferences */
@@ -499,7 +520,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col vault-locked">
 
   <!-- ======================================================================= -->
   <!-- TOP EXECUTIVE NAVIGATION HEADER                                         -->
@@ -2470,29 +2491,48 @@
   </div>
 
   <!-- ======================================================================= -->
-  <!-- FULL-SCREEN SHA-256 SECURITY VAULT LOCK OVERLAY                         -->
+  <!-- FULL-SCREEN WELCOME LOGIN GATEWAY (WI-FI ROUTER STYLE • SHA-256 VAULT)  -->
   <!-- ======================================================================= -->
-  <div id="appLockOverlay" class="hidden fixed inset-0 z-[100] vault-overlay flex items-center justify-center p-4 no-print">
-    <div id="appLockCard" class="modal-pop w-full max-w-md rounded-3xl bg-slate-900/90 border border-emerald-400/30 shadow-2xl p-6 sm:p-7 text-white space-y-5">
-      <div class="text-center space-y-2">
-        <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-500/20 border border-amber-300/50 flex items-center justify-center text-3xl shadow-lg">🔒</div>
-        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/20 border border-amber-300/40 text-amber-200 text-[10px] font-bold">
-          SHA-256 / PBKDF2 SECURITY VAULT
+  <div id="appLockOverlay" class="fixed inset-0 z-[100] vault-overlay flex items-center justify-center p-4 no-print">
+    <div id="appLockCard" class="modal-pop w-full max-w-md rounded-3xl bg-slate-900/95 border border-emerald-400/35 shadow-2xl p-6 sm:p-7 text-white space-y-5 relative overflow-hidden">
+      <div class="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-emerald-500 via-amber-400 to-emerald-500"></div>
+
+      <div class="text-center space-y-2.5 pt-1">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-500/20 border border-amber-300/60 flex items-center justify-center shadow-lg">
+          <svg class="w-9 h-9 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3L3.5 19h17L12 3z" fill="rgba(251, 191, 36, 0.22)"/>
+            <path d="M8.5 19l3.5-7 3.5 7"/>
+            <path d="M3 19h18"/>
+            <circle cx="18.2" cy="5.8" r="1.8" fill="currentColor" stroke="none"/>
+          </svg>
         </div>
-        <h2 class="text-lg sm:text-xl font-bold text-white">ပုပ္ပားတောင်ဥယျာဉ်-ငွေစာရင်းဌာနစိတ်</h2>
-        <p class="text-xs text-emerald-100/80">ဆက်လက်အသုံးပြုရန် လုံခြုံရေး Passcode ထည့်သွင်းပါ</p>
+        <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-400/20 border border-amber-300/45 text-amber-200 text-[10px] font-bold tracking-wide">
+          🛡️ WELCOME • FINANCE SECTION GATEWAY
+        </div>
+        <h2 class="text-lg sm:text-xl font-bold text-white leading-snug">ပုပ္ပားတောင်ဥယျာဉ်-ငွေစာရင်းဌာနစိတ်</h2>
+        <p class="text-xs text-emerald-100/85 leading-relaxed">
+          ကြိုဆိုပါသည် • ဒေတာဘေ့စ်နှင့် လုပ်ငန်းစနစ်အတွင်းသို့ ဝင်ရောက်ရန် စကားဝှက် (Password) ထည့်သွင်း၍ Login ဝင်ပါ
+        </p>
       </div>
 
       <form onsubmit="submitAppUnlock(event)" class="space-y-3.5">
-        <div class="relative">
-          <input type="password" id="appUnlockInput" required autocomplete="off"
-            placeholder="Passcode (သို့) Recovery Key ရိုက်ထည့်ပါ..."
-            class="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-emerald-400/35 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm" />
+        <div class="space-y-1.5">
+          <label for="appUnlockInput" class="block text-[11px] font-semibold text-emerald-200/90">
+            🔐 ဝင်ရောက်ခွင့် စကားဝှက် (Access Password)
+          </label>
+          <div class="relative">
+            <input type="password" id="appUnlockInput" required autocomplete="off"
+              placeholder="စကားဝှက် (သို့) Recovery Key ရိုက်ထည့်ပါ..."
+              class="w-full pl-4 pr-11 py-3 rounded-xl bg-slate-950/85 border border-emerald-400/40 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm" />
+            <button type="button" id="toggleWelcomePassBtn" onclick="toggleWelcomePasswordVisibility()"
+              class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg hover:bg-white/10 text-slate-300 hover:text-amber-300 flex items-center justify-center text-sm transition cursor-pointer"
+              title="စကားဝှက် ကြည့်ရန်/ဖျောက်ရန်" aria-label="စကားဝှက် ကြည့်ရန်/ဖျောက်ရန်">👁️</button>
+          </div>
         </div>
-        <div id="appLockError" class="hidden text-xs font-semibold text-rose-300 bg-rose-950/60 border border-rose-500/40 px-3 py-2 rounded-xl text-center"></div>
+        <div id="appLockError" class="hidden text-xs font-semibold text-rose-300 bg-rose-950/65 border border-rose-500/40 px-3 py-2 rounded-xl text-center"></div>
         <button type="submit" id="appUnlockBtn"
           class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-sm shadow-lg transition cursor-pointer">
-          🔓 Passcode ဖြင့် သော့ဖွင့်မည်
+          🔓 စနစ်အတွင်းသို့ ဝင်ရောက်မည် (Login)
         </button>
       </form>
 
@@ -2505,15 +2545,27 @@
         <button type="button" id="appUnlockBioBtn" onclick="unlockAppWithBiometric()"
           class="w-full py-3 rounded-xl bg-sky-500/25 hover:bg-sky-500/40 border border-sky-300/50 text-sky-100 font-bold text-sm flex items-center justify-center gap-2 shadow-md transition cursor-pointer">
           <span>👆</span>
-          <span>Fingerprint / Face ID ဖြင့် သော့ဖွင့်မည်</span>
+          <span>Fingerprint / Face ID ဖြင့် ဝင်ရောက်မည်</span>
         </button>
       </div>
       <div id="appLockBioHint" class="hidden text-center text-[11px] text-amber-200/85 bg-amber-500/10 border border-amber-300/25 px-3 py-1.5 rounded-xl">
-        Local file ဖြစ်သဖြင့် Passcode ဖြင့် သော့ဖွင့်ပါ (Biometric သည် HTTPS တွင် အလုပ်လုပ်သည်)
+        Local file ဖြစ်သဖြင့် Password ဖြင့် ဝင်ရောက်ပါ (Biometric သည် HTTPS တွင် အလုပ်လုပ်သည်)
       </div>
 
-      <div class="text-center text-[11px] text-emerald-200/70 pt-1 border-t border-white/10">
-        Passcode ၅ ကြိမ်မှားယွင်းပါက Brute-Force ကာကွယ်ရေးအရ ခေတ္တပိတ်ဆို့ပါမည်
+      <div class="pt-2.5 border-t border-white/10 space-y-2 text-center">
+        <p class="text-[11px] text-emerald-200/80 leading-relaxed">
+          Login ဝင်ရောက်ပြီးနောက် <strong>🛡️ လုံခြုံရေး</strong> ထဲတွင် စကားဝှက်အသစ်ပြောင်းခြင်းနှင့် လုံခြုံရေးဆက်တင်များ ပြင်ဆင်နိုင်ပါသည်
+        </p>
+        <p class="text-[10px] text-slate-400">
+          စကားဝှက် ၅ ကြိမ်မှားယွင်းပါက Brute-Force ကာကွယ်ရေးအရ ခေတ္တပိတ်ဆို့ပါမည်
+        </p>
+        <div class="pt-1">
+          <a href="index.html"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-semibold text-emerald-100 transition">
+            <span>←</span>
+            <span>ပင်မမီနူး (index.html) သို့ ပြန်သွားရန်</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -3088,12 +3140,19 @@ function doPost(e) {
       defaultView: 'daily'         // 'daily' | 'calendar' | 'table'
     };
 
+    // Pre-hashed Default Access Password (Salted PBKDF2-HMAC-SHA256 • Plaintext never stored)
+    const DEFAULT_LOCK_SALT = '8e38428e7c1e318ea42b07dab40c06c6';
+    const DEFAULT_LOCK_HASH = 'dd4340fc365c0ed78f3637132135ff089ef0d738b55cbc07c3a6fca55e9d55bb';
+    const DEFAULT_LOCK_ITER = 5000;
+
     // Cryptographic Security State (Salted PBKDF2-SHA256 hashes only — NEVER plaintext)
     let securityConfig = {
-      appLockEnabled: false,
-      appPassHash: '',
-      appPassSalt: '',
-      appPassIter: 5000,
+      appLockEnabled: true,
+      appPassHash: DEFAULT_LOCK_HASH,
+      appPassSalt: DEFAULT_LOCK_SALT,
+      appPassIter: DEFAULT_LOCK_ITER,
+      usingDefaultPass: true,
+      defaultLockDismissed: false,
       recoveryHash: '',
       recoverySalt: '',
       biometricEnabled: false,
@@ -3248,6 +3307,16 @@ function doPost(e) {
           if (s && typeof s === 'object') {
             securityConfig = { ...securityConfig, ...s };
           }
+        }
+        // Activate Default Welcome Screen Password unless user already set custom password or explicitly disabled it
+        if (!securityConfig.defaultLockDismissed && !securityConfig.appPassHash) {
+          securityConfig.appLockEnabled = true;
+          securityConfig.appPassSalt = DEFAULT_LOCK_SALT;
+          securityConfig.appPassHash = DEFAULT_LOCK_HASH;
+          securityConfig.appPassIter = DEFAULT_LOCK_ITER;
+          securityConfig.usingDefaultPass = true;
+          if (!securityConfig.autoLockMin) securityConfig.autoLockMin = 5;
+          saveSecurityConfig();
         }
         const rawAudit = localStorage.getItem(STORAGE_AUDIT_KEY);
         if (rawAudit) {
@@ -4084,8 +4153,36 @@ function doPost(e) {
       showToast('🔒 Engineering Mode ကို ပြန်လည်သော့ခတ်လိုက်ပါပြီ', 'info');
     }
 
-    /** App Access Lock Screen Functions */
-    function lockAppNow() {
+    /** App Access Welcome Login & Lock Screen Functions */
+    let cloudPollingStarted = false;
+
+    function toggleWelcomePasswordVisibility() {
+      const inp = document.getElementById('appUnlockInput');
+      const btn = document.getElementById('toggleWelcomePassBtn');
+      if (!inp) return;
+      const showing = inp.type === 'text';
+      inp.type = showing ? 'password' : 'text';
+      if (btn) btn.textContent = showing ? '👁️' : '🙈';
+    }
+
+    function revealUnlockedApp() {
+      isAppLocked = false;
+      lastActivityAt = Date.now();
+      document.body.classList.remove('vault-locked');
+      const ov = document.getElementById('appLockOverlay');
+      if (ov) ov.classList.add('hidden');
+      const inp = document.getElementById('appUnlockInput');
+      if (inp) { inp.value = ''; inp.type = 'password'; }
+      const eyeBtn = document.getElementById('toggleWelcomePassBtn');
+      if (eyeBtn) eyeBtn.textContent = '👁️';
+      if (!cloudPollingStarted) {
+        cloudPollingStarted = true;
+        startCloudAutoPolling();
+      }
+      updateSecurityIndicators();
+    }
+
+    function lockAppNow(silentAudit = false) {
       if (!securityConfig.appLockEnabled || !securityConfig.appPassHash) {
         openSecurityModal();
         showToast('ဦးစွာ Database / App Passcode သတ်မှတ်ပေးပါ', 'info');
@@ -4094,8 +4191,12 @@ function doPost(e) {
       isAppLocked = true;
       engUnlockedUntil = 0;
       dbUnlockedUntil = 0;
+      document.body.classList.add('vault-locked');
       document.getElementById('appLockError').classList.add('hidden');
-      document.getElementById('appUnlockInput').value = '';
+      const inp = document.getElementById('appUnlockInput');
+      if (inp) { inp.value = ''; inp.type = 'password'; }
+      const eyeBtn = document.getElementById('toggleWelcomePassBtn');
+      if (eyeBtn) eyeBtn.textContent = '👁️';
 
       const bioWrap = document.getElementById('appLockBioWrap');
       const bioHint = document.getElementById('appLockBioHint');
@@ -4105,8 +4206,10 @@ function doPost(e) {
 
       document.getElementById('appLockOverlay').classList.remove('hidden');
       updateSecurityIndicators();
-      logAudit('SECURITY', 'စနစ်အား လော့ခ်ချပြီး', 'App Vault Lock activated', 'info');
-      setTimeout(() => document.getElementById('appUnlockInput').focus(), 80);
+      if (!silentAudit) {
+        logAudit('SECURITY', 'စနစ်အား လော့ခ်ချပြီး', 'App Vault Lock activated', 'info');
+      }
+      setTimeout(() => { if (inp) inp.focus(); }, 80);
     }
 
     async function unlockAppWithBiometric() {
@@ -4115,19 +4218,17 @@ function doPost(e) {
       try {
         const ok = await verifyBiometricCredential();
         if (ok) {
-          isAppLocked = false;
           securityConfig.failedAttempts = 0;
           securityConfig.lockoutUntil = 0;
           saveSecurityConfig();
-          lastActivityAt = Date.now();
-          document.getElementById('appLockOverlay').classList.add('hidden');
+          revealUnlockedApp();
           logAudit('SECURITY', 'Biometric (Fingerprint/Face ID) ဖြင့် သော့ဖွင့်ဝင်ရောက်ပြီး', 'WebAuthn Verified', 'success');
           showToast('👆 Biometric အတည်ပြုမှု အောင်မြင်ပါသည် — ကြိုဆိုပါသည်', 'success');
         }
       } catch (err) {
         errEl.textContent = err && err.name === 'NotAllowedError'
-          ? 'Biometric စစ်ဆေးမှု ပယ်ဖျက်လိုက်ပါသည် — Passcode ဖြင့် ဝင်ရောက်နိုင်ပါသည်။'
-          : (err.message || 'Biometric စစ်ဆေးမှု မအောင်မြင်ပါ — Passcode ဖြင့် ဝင်ရောက်ပါ။');
+          ? 'Biometric စစ်ဆေးမှု ပယ်ဖျက်လိုက်ပါသည် — Password ဖြင့် ဝင်ရောက်နိုင်ပါသည်။'
+          : (err.message || 'Biometric စစ်ဆေးမှု မအောင်မြင်ပါ — Password ဖြင့် ဝင်ရောက်ပါ။');
         errEl.classList.remove('hidden');
       }
     }
@@ -4159,14 +4260,22 @@ function doPost(e) {
       }
 
       if (ok) {
-        isAppLocked = false;
         securityConfig.failedAttempts = 0;
         securityConfig.lockoutUntil = 0;
         saveSecurityConfig();
-        lastActivityAt = Date.now();
-        document.getElementById('appLockOverlay').classList.add('hidden');
-        logAudit('SECURITY', usedRecovery ? 'Recovery Key ဖြင့် သော့ဖွင့်ပြီး' : 'စနစ်သော့ဖွင့် ဝင်ရောက်ပြီး', 'PBKDF2-SHA256 Verified', 'success');
-        showToast(usedRecovery ? '🔑 Recovery Key ဖြင့် ဝင်ရောက်ပြီးပါပြီ — Passcode အသစ်ပြန်ပြောင်းနိုင်သည်' : '🔓 ကြိုဆိုပါသည် — စနစ်သော့ဖွင့်ပြီးပါပြီ', 'success');
+        revealUnlockedApp();
+        logAudit('SECURITY', usedRecovery ? 'Recovery Key ဖြင့် သော့ဖွင့်ပြီး' : 'စနစ်သို့ Login ဝင်ရောက်ပြီး', 'PBKDF2-SHA256 Verified', 'success');
+        if (usedRecovery) {
+          showToast('🔑 Recovery Key ဖြင့် ဝင်ရောက်ပြီးပါပြီ — 🛡️ လုံခြုံရေးထဲတွင် စကားဝှက်အသစ်ပြောင်းနိုင်သည်', 'success');
+        } else if (securityConfig.usingDefaultPass) {
+          showToastWithAction(
+            '🔓 ကြိုဆိုပါသည် — Default Password ဖြင့် ဝင်ရောက်ပြီးပါပြီ (လုံခြုံရေးထဲတွင် စကားဝှက်ပြောင်းနိုင်သည်)',
+            '🛡️ လုံခြုံရေး',
+            openSecurityModal
+          );
+        } else {
+          showToast('🔓 ကြိုဆိုပါသည် — စနစ်သို့ အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ', 'success');
+        }
       } else {
         securityConfig.failedAttempts = (securityConfig.failedAttempts || 0) + 1;
         if (securityConfig.failedAttempts >= 5) {
@@ -4174,8 +4283,8 @@ function doPost(e) {
           securityConfig.lockoutUntil = Date.now() + penaltySec * 1000;
         }
         saveSecurityConfig();
-        logAudit('SECURITY', 'စနစ်ဝင်ရောက်မှု Passcode မှားယွင်း', `မှားယွင်းမှု အကြိမ် ${securityConfig.failedAttempts}`, 'danger');
-        errEl.textContent = `Passcode မှားယွင်းနေပါသည် (မှားယွင်းမှု ${toMM(securityConfig.failedAttempts)}/၅ ကြိမ်)`;
+        logAudit('SECURITY', 'စနစ်ဝင်ရောက်မှု Password မှားယွင်း', `မှားယွင်းမှု အကြိမ် ${securityConfig.failedAttempts}`, 'danger');
+        errEl.textContent = `စကားဝှက် မှားယွင်းနေပါသည် (မှားယွင်းမှု ${toMM(securityConfig.failedAttempts)}/၅ ကြိမ်)`;
         errEl.classList.remove('hidden');
         card.classList.remove('shake-error'); void card.offsetWidth; card.classList.add('shake-error');
       }
@@ -4236,8 +4345,14 @@ function doPost(e) {
       `).join('');
 
       const appPill = document.getElementById('appLockStatusPill');
-      appPill.textContent = p.hasAppLock ? '🔒 ဖွင့်ထားသည်' : 'ပိတ်ထားသည်';
-      appPill.className = `px-2.5 py-1 rounded-full text-[11px] font-bold ${p.hasAppLock ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}`;
+      appPill.textContent = p.hasAppLock
+        ? (securityConfig.usingDefaultPass ? '🔒 ဖွင့်ထားသည် (Default Password)' : '🔒 ဖွင့်ထားသည် (ကိုယ်ပိုင် Password)')
+        : 'ပိတ်ထားသည်';
+      appPill.className = `px-2.5 py-1 rounded-full text-[11px] font-bold ${
+        p.hasAppLock
+          ? (securityConfig.usingDefaultPass ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-800')
+          : 'bg-slate-100 text-slate-600'
+      }`;
       document.getElementById('disableAppLockBtn').classList.toggle('hidden', !p.hasAppLock);
       document.getElementById('secAutoLockSelect').value = String(securityConfig.autoLockMin || 0);
 
@@ -4300,6 +4415,8 @@ function doPost(e) {
         securityConfig.appPassSalt = salt;
         securityConfig.appPassHash = hash;
         securityConfig.appPassIter = 5000;
+        securityConfig.usingDefaultPass = false;
+        securityConfig.defaultLockDismissed = false;
         securityConfig.recoverySalt = recSalt;
         securityConfig.recoveryHash = recHash;
         if (!securityConfig.autoLockMin) securityConfig.autoLockMin = 5;
@@ -4328,6 +4445,8 @@ function doPost(e) {
         securityConfig.appLockEnabled = false;
         securityConfig.appPassHash = '';
         securityConfig.appPassSalt = '';
+        securityConfig.usingDefaultPass = false;
+        securityConfig.defaultLockDismissed = true;
         securityConfig.recoveryHash = '';
         securityConfig.recoverySalt = '';
         securityConfig.dbAccessLockEnabled = false;
@@ -4335,6 +4454,7 @@ function doPost(e) {
         securityConfig.biometricCredId = '';
         securityConfig.biometricRegisteredAt = 0;
         dbUnlockedUntil = 0;
+        document.body.classList.remove('vault-locked');
         saveSecurityConfig();
         document.getElementById('recoveryKeyBox').classList.add('hidden');
         logAudit('SECURITY', 'App Access Lock ဖြုတ်လိုက်ပြီး', 'Screen lock disabled', 'warn');
@@ -8148,12 +8268,13 @@ function doPost(e) {
       renderAll();
       initCalendarSwipe();
       initLiveClocks();
-      startCloudAutoPolling();
       detectWebAuthnSupport().then(() => {
         updateSecurityIndicators();
       });
       if (securityConfig.appLockEnabled && securityConfig.appPassHash) {
-        lockAppNow();
+        lockAppNow(true);
+      } else {
+        revealUnlockedApp();
       }
       setInterval(checkLiveDateTransition, 15000);
     }
