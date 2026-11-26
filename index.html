@@ -6,7 +6,7 @@
   <title>ပုပ္ပားတောင်ဥယျာဉ် | Popa Mountain Park — Management Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
   <script>
     /* Prevent theme & language flash on page load */
     (function () {
@@ -402,34 +402,101 @@
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.52);
     }
 
-    .hero-stats {
+    /* Stylish Conservation Motto Plaque */
+    .hero-motto {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      max-width: 720px;
+      padding: 0.92rem 1.35rem 0.96rem 1.25rem;
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 0% 50%, rgba(16, 185, 129, 0.22) 0%, transparent 55%),
+        linear-gradient(135deg, rgba(4, 28, 21, 0.74) 0%, rgba(6, 52, 39, 0.64) 100%);
+      border: 1px solid rgba(251, 191, 36, 0.34);
+      border-left: 3.5px solid #fbbf24;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow:
+        0 14px 32px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+    }
+
+    .hero-motto::after {
+      content: "“";
+      position: absolute;
+      top: -0.35rem;
+      right: 0.85rem;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 4.5rem;
+      line-height: 1;
+      color: rgba(251, 191, 36, 0.13);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .motto-emblem {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(145deg, rgba(52, 211, 153, 0.22), rgba(251, 191, 36, 0.18));
+      border: 1px solid rgba(251, 191, 36, 0.42);
+      color: #fde68a;
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
     }
 
-    .stat-chip {
-      background: rgba(4, 24, 18, 0.60);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 14px;
-      padding: 0.62rem 1.05rem;
-      min-width: 180px;
+    .motto-emblem svg {
+      width: 22px;
+      height: 22px;
     }
 
-    .stat-label {
-      display: block;
-      font-size: 0.72rem;
-      color: rgba(226, 242, 234, 0.84);
-      line-height: 1.4;
+    .motto-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.22rem;
+      min-width: 0;
     }
 
-    .stat-value {
+    .motto-kicker {
       font-family: "Inter", "Noto Sans Myanmar", sans-serif;
-      font-size: 0.96rem;
+      font-size: 0.67rem;
       font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6ee7b7;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .motto-en {
+      font-family: "Playfair Display", Georgia, serif;
+      font-style: italic;
+      font-size: clamp(1.06rem, 1.5vw, 1.32rem);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.3;
       color: #ffffff;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.42);
+    }
+
+    .motto-en .motto-accent {
+      color: #fde68a;
+    }
+
+    .motto-my {
+      font-family: "Noto Sans Myanmar", "Pyidaungsu", sans-serif;
+      font-size: clamp(0.88rem, 1.05vw, 0.98rem);
+      font-weight: 600;
+      color: #d1fae5;
+      line-height: 1.6;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
     }
 
     .hero-aside {
@@ -852,79 +919,183 @@
       height: 14px;
     }
 
-    /* Full-Width Sync & Security Info Banner */
-    .sync-strip {
-      margin-top: 1.5rem;
+    /* Full-Width Executive Copyright Web Design Banner */
+    .copyright-banner {
+      position: relative;
+      overflow: hidden;
+      margin-top: 1.75rem;
       width: 100%;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 1.1rem 1.4rem;
+      border-radius: 18px;
+      padding: 1.45rem clamp(1.25rem, 2.5vw, 2.1rem);
+      background:
+        radial-gradient(circle at 12% 20%, rgba(16, 185, 129, 0.24) 0%, transparent 48%),
+        radial-gradient(circle at 88% 85%, rgba(245, 158, 11, 0.18) 0%, transparent 45%),
+        linear-gradient(125deg, #04251c 0%, #063f30 52%, #042c22 100%);
+      border: 1px solid rgba(251, 191, 36, 0.30);
+      box-shadow:
+        0 14px 34px -10px rgba(4, 37, 28, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
-      box-shadow: 0 4px 16px rgba(4, 47, 36, 0.04);
+      gap: 1.1rem 1.5rem;
+      color: #ffffff;
+      isolation: isolate;
     }
 
-    .sync-strip-left {
+    [data-theme="dark"] .copyright-banner {
+      background:
+        radial-gradient(circle at 12% 20%, rgba(16, 185, 129, 0.20) 0%, transparent 48%),
+        radial-gradient(circle at 88% 85%, rgba(251, 191, 36, 0.15) 0%, transparent 45%),
+        linear-gradient(125deg, #071d17 0%, #0b2d23 52%, #082019 100%);
+      border-color: rgba(251, 191, 36, 0.28);
+      box-shadow:
+        0 18px 40px -12px rgba(0, 0, 0, 0.58),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    /* Gold shimmer accent bar along the top edge */
+    .copyright-banner::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, rgba(16, 185, 129, 0.7) 20%, rgba(251, 191, 36, 0.92) 50%, rgba(16, 185, 129, 0.7) 80%, transparent 100%);
+      pointer-events: none;
+    }
+
+    /* Subtle geometric grid sheen */
+    .copyright-banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.12) 55%, rgba(0,0,0,0.45));
+      -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.12) 55%, rgba(0,0,0,0.45));
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .copyright-left {
       display: flex;
-      align-items: flex-start;
-      gap: 0.9rem;
-      flex: 1 1 520px;
+      align-items: center;
+      gap: 1.05rem;
+      min-width: 0;
     }
 
-    .sync-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: var(--m-main-soft);
-      color: var(--m-main);
+    .copyright-emblem {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(251, 191, 36, 0.22), rgba(16, 185, 129, 0.16));
+      border: 1px solid rgba(251, 191, 36, 0.46);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+      color: #fde68a;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      margin-top: 0.1rem;
     }
 
-    .sync-strip h3 {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 0.2rem;
+    .copyright-emblem svg {
+      width: 24px;
+      height: 24px;
     }
 
-    .sync-strip p {
-      font-size: 0.82rem;
-      color: var(--text-secondary);
-      line-height: 1.55;
+    .copyright-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
     }
 
-    .sync-strip .sync-en {
+    .copyright-kicker {
       font-family: "Inter", sans-serif;
-      font-size: 0.79rem;
-      color: var(--text-muted);
-      margin-top: 0.18rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #fde68a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
     }
 
-    .sync-badges {
+    .copyright-kicker::before {
+      content: "";
+      width: 18px;
+      height: 1.5px;
+      background: linear-gradient(90deg, #fbbf24, #34d399);
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .copyright-title {
+      font-family: "Inter", sans-serif;
+      font-size: clamp(1rem, 1.45vw, 1.24rem);
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      color: #ffffff;
+      line-height: 1.28;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
+    }
+
+    .copyright-title .cp-dash {
+      color: #fbbf24;
+      font-weight: 700;
+      margin: 0 0.2rem;
+    }
+
+    .copyright-sub {
+      font-family: "Noto Sans Myanmar", "Inter", sans-serif;
+      font-size: 0.78rem;
+      color: rgba(209, 250, 229, 0.82);
+      line-height: 1.45;
+    }
+
+    .copyright-right {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
-    .sync-badge {
-      font-family: "Inter", monospace;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.36rem 0.82rem;
+    .copyright-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.42rem;
+      padding: 0.42rem 0.92rem;
       border-radius: 999px;
-      background: var(--m-main-soft);
-      color: var(--m-main);
-      border: 1px solid rgba(5, 150, 105, 0.24);
+      font-family: "Inter", sans-serif;
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #ecfdf5;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       white-space: nowrap;
+    }
+
+    .copyright-pill--gold {
+      color: #fef3c7;
+      background: rgba(251, 191, 36, 0.13);
+      border-color: rgba(251, 191, 36, 0.36);
+    }
+
+    .copyright-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.22);
+      display: inline-block;
     }
 
     /* Full-Width Footer */
@@ -1007,12 +1178,14 @@
       .brand-sub {
         display: none;
       }
-      .hero-stats {
+      .hero-motto {
         width: 100%;
+        padding: 0.85rem 1rem;
+        gap: 0.8rem;
       }
-      .stat-chip {
-        flex: 1 1 140px;
-        min-width: 135px;
+      .motto-emblem {
+        width: 38px;
+        height: 38px;
       }
     }
   </style>
@@ -1098,40 +1271,23 @@
           <p class="hero-desc-en lang-en">Centralized executive workspace to directly access the Park Warden's Master Database, Excel (.xlsm) / QGIS launchers, and daily supervision dashboards across all three divisions.</p>
         </div>
 
-        <div class="hero-stats">
-          <div class="stat-chip">
-            <span class="stat-label">
-              <span class="lang-my">ချိတ်ဆက်ထားသည့် စနစ်</span>
-              <span class="lang-sep">/</span>
-              <span class="lang-en">Connected Modules</span>
-            </span>
-            <span class="stat-value">
-              <span class="lang-my">၄ ခု</span>
+        <blockquote class="hero-motto" aria-label="Conservation Motto">
+          <div class="motto-emblem" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+              <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+            </svg>
+          </div>
+          <div class="motto-body">
+            <span class="motto-kicker">
+              <span class="lang-en">Conservation Motto</span>
               <span class="lang-sep">&bull;</span>
-              <span class="lang-en">4 Modules</span>
+              <span class="lang-my">သဘာဝထိန်းသိမ်းရေး ဆောင်ပုဒ်</span>
             </span>
+            <div class="motto-en lang-en">&ldquo;Every Species Counts, <span class="motto-accent">Every Life Matters.</span>&rdquo;</div>
+            <div class="motto-my lang-my">မျိုးစိတ်တိုင်းက အရေးပါသည်၊ သက်ရှိတိုင်းက တန်ဖိုးရှိသည်။</div>
           </div>
-          <div class="stat-chip">
-            <span class="stat-label">
-              <span class="lang-my">လုပ်ငန်းစောင့်ကြည့်ကာလ</span>
-              <span class="lang-sep">/</span>
-              <span class="lang-en">Supervision Period</span>
-            </span>
-            <span class="stat-value">
-              <span class="lang-my">၂၀၂၆ – ၂၀၃၁ (၅၃ လ)</span>
-              <span class="lang-sep">&bull;</span>
-              <span class="lang-en">2026–2031 (53 Mos)</span>
-            </span>
-          </div>
-          <div class="stat-chip">
-            <span class="stat-label">
-              <span class="lang-my">Cloud Sync နှင့် လုံခြုံရေး</span>
-              <span class="lang-sep">/</span>
-              <span class="lang-en">Cloud Sync &amp; Security</span>
-            </span>
-            <span class="stat-value">AD_Db_Sync &bull; SHA-256</span>
-          </div>
-        </div>
+        </blockquote>
       </div>
 
       <div class="hero-aside">
@@ -1445,28 +1601,34 @@
 
     </div>
 
-    <!-- Full-Width Integration & Security Strip -->
-    <section class="sync-strip" aria-label="System Integration Details">
-      <div class="sync-strip-left">
-        <div class="sync-icon" aria-hidden="true">
-          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+    <!-- Full-Width Executive Copyright Web Design Banner -->
+    <section class="copyright-banner" aria-label="Copyright Notice">
+      <div class="copyright-left">
+        <div class="copyright-emblem" aria-hidden="true">
+          <svg fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9.5"></circle>
+            <path d="M14.8 9.4a3.7 3.7 0 1 0 0 5.2"></path>
           </svg>
         </div>
-        <div>
-          <h3>
-            <span class="lang-my">စာမျက်နှာ (၄) ခုလုံး အပြန်အလှန် ချိတ်ဆက်၍ လုံခြုံရေးစနစ် တပ်ဆင်ထားသည်</span>
+        <div class="copyright-copy">
+          <span class="copyright-kicker">Official Portal &bull; Intellectual Property</span>
+          <div class="copyright-title">Copyright <span class="cp-dash">-</span> Dr. Kyaw Sein Win Tun</div>
+          <div class="copyright-sub">
+            <span class="lang-my">ပုပ္ပားတောင်ဥယျာဉ် စီမံခန့်ခွဲမှု ပင်မစာမျက်နှာ</span>
             <span class="lang-sep">&bull;</span>
-            <span class="lang-en">All 4 Modules Interconnected &amp; SHA-256 Protected</span>
-          </h3>
-          <p class="lang-my">ဌာနစိတ် စာမျက်နှာတစ်ခုချင်းစီ၏ အပေါ်ဘယ်ဘက်ထောင့်ရှိ <strong>ပင်မမီနူးသို့ ပြန်ရန် (Back to Portal)</strong> ခလုတ်မှတစ်ဆင့် ဤစာမျက်နှာသို့ အချိန်မရွေး ပြန်လာနိုင်ပြီး ဝင်ရောက်ခွင့်စကားဝှက် (Welcome Login Gateway) ဖြင့် ကာကွယ်ထားပါသည်။</p>
-          <p class="sync-en lang-en">Return to this portal anytime using the <strong>Back to Portal</strong> button in the top-left corner of each module. Every dashboard is protected with a PBKDF2-SHA256 Welcome Login Gateway and synced via AD_Db_Sync.</p>
+            <span class="lang-en">Popa Mountain Park Integrated Management Portal</span>
+          </div>
         </div>
       </div>
-      <div class="sync-badges">
-        <span class="sync-badge">AD_Db_Sync</span>
-        <span class="sync-badge">SHA-256 Vault</span>
-        <span class="sync-badge">GitHub Pages Ready</span>
+
+      <div class="copyright-right">
+        <span class="copyright-pill copyright-pill--gold">
+          &copy; <span id="bannerYear">2026</span> &bull; All Rights Reserved
+        </span>
+        <span class="copyright-pill">
+          <span class="copyright-dot" aria-hidden="true"></span>
+          Original Web Design
+        </span>
       </div>
     </section>
   </main>
@@ -1494,10 +1656,12 @@
       // 1. Live Date & Time Clock
       const clockText = document.getElementById('clockText');
       const yearNow = document.getElementById('yearNow');
+      const bannerYear = document.getElementById('bannerYear');
 
       function updateClock() {
         const now = new Date();
         yearNow.textContent = now.getFullYear();
+        if (bannerYear) bannerYear.textContent = now.getFullYear();
         const datePart = now.toLocaleDateString('en-GB', {
           day: '2-digit',
           month: 'short',
